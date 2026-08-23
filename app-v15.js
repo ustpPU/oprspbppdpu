@@ -240,6 +240,15 @@ function fitReportToSinglePage() {
   const notice = document.getElementById("reportFitNotice");
   if (!area || !content) return { scale: 1, tooLong: false };
 
+  // Pada muatan awal, tab Borang masih tersembunyi dan tingginya terbaca 0.
+  // Jangan anggap keadaan itu sebagai laporan terlalu panjang.
+  if (area.clientHeight <= 0 || !area.getClientRects().length) {
+    content.style.transform = "none";
+    content.style.width = "100%";
+    if (notice) notice.classList.add("hidden");
+    return { scale: 1, tooLong: false };
+  }
+
   content.style.transform = "none";
   content.style.width = "100%";
   fitHeroForSinglePage();
