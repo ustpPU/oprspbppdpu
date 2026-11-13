@@ -20,11 +20,22 @@ function getApiUrl() {
   return GAS_WEB_APP_URL;
 }
 
+let previewFitFrame = 0;
+let previewRenderFrame = 0;
+
+function schedulePreviewFit() {
+  if (previewFitFrame) return;
+  previewFitFrame = requestAnimationFrame(() => {
+    previewFitFrame = 0;
+    fitPreview();
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  fitPreview();
-  window.addEventListener("resize", fitPreview);
+  schedulePreviewFit();
+  window.addEventListener("resize", schedulePreviewFit);
   if (window.ResizeObserver) {
-    new ResizeObserver(fitPreview).observe(document.getElementById("previewShell"));
+    new ResizeObserver(schedulePreviewFit).observe(document.getElementById("previewShell"));
   }
 });
 
@@ -33,12 +44,14 @@ function fitPreview() {
   const area = document.getElementById("printArea");
   const notice = document.getElementById("reportFitNotice");
   if (!shell || !area || area.classList.contains("pdf-capture")) return;
-  area.style.transform = "none";
-  const naturalWidth = area.offsetWidth || 794;
-  const scale = Math.min(1, shell.clientWidth / naturalWidth);
-  area.style.transform = `scale(${scale})`;
+  const shellWidth = shell.clientWidth;
+  if (!shellWidth) return;
+  const scale = Math.min(1, shellWidth / (area.offsetWidth || 794));
   const noticeHeight = notice && !notice.classList.contains("hidden") ? notice.offsetHeight + 8 : 0;
-  shell.style.height = `${noticeHeight + area.offsetHeight * scale}px`;
+  const height = `${noticeHeight + area.offsetHeight * scale}px`;
+  const transform = `scale(${scale})`;
+  if (area.style.transform !== transform) area.style.transform = transform;
+  if (shell.style.height !== height) shell.style.height = height;
 }
 
 async function loadData(isRefresh = false) {
@@ -50,7 +63,8 @@ async function loadData(isRefresh = false) {
       const cached = JSON.parse(localStorage.getItem("oprInitialDataV15") || "null");
       if (cached && cached.status === "success") applyInitialData(cached, selectedOfficer);
     } catch (cacheError) {
-      localStorage.removeItem("oprInitialDataV15");
+      try { localStorage.removeItem("oprInitialDataV15"); }
+      catch (storageError) { console.warn("Cache OPR tidak dapat dibersihkan:", storageError); }
     }
   }
   try {
@@ -58,8 +72,13 @@ async function loadData(isRefresh = false) {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const result = await response.json();
     if (result.status !== "success") throw new Error(result.message || "Data tidak dapat dimuatkan");
-    localStorage.setItem("oprInitialDataV15", JSON.stringify(result));
-    applyInitialData(result, selectedOfficer);
+    applyInitialData(result, document.getElementById("namaPegawai")?.value || "");
+    const saveCache = () => {
+      try { localStorage.setItem("oprInitialDataV15", JSON.stringify(result)); }
+      catch (cacheError) { console.warn("Cache OPR tidak dapat disimpan:", cacheError); }
+    };
+    if (window.requestIdleCallback) window.requestIdleCallback(saveCache, { timeout: 1500 });
+    else setTimeout(saveCache, 0);
   } catch (err) {
     console.error("Gagal tarik data:", err);
     const tbody = document.getElementById("oprTableBody");
@@ -73,12 +92,26 @@ function applyInitialData(result, selectedOfficer = "") {
   state.pegawai = result.pegawai || [];
   state.respon = result.respon || [];
   renderStats();
-  renderTable(state.respon);
+  filterTable();
   populatePegawaiDropdown();
   if (selectedOfficer && state.pegawai.some(person => person.nama === selectedOfficer)) {
     document.getElementById("namaPegawai").value = selectedOfficer;
   }
+  officerGridDirty = true;
+  if (!document.getElementById("sec-pegawai")?.classList.contains("hidden")) renderOfficerGridIfNeeded();
+}
+
+let officerGridDirty = false;
+function renderOfficerGridIfNeeded() {
+  if (!officerGridDirty) return;
   renderPegawaiGrid();
+  officerGridDirty = false;
+}
+
+let searchTimer;
+function scheduleReportSearch() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(filterTable, 120);
 }
 
 function renderStats() {
@@ -180,6 +213,13 @@ function applyImageCrop() {
 }
 
 function updatePreview() {
+  if (previewRenderFrame) return;
+  previewRenderFrame = requestAnimationFrame(flushPreview);
+}
+
+function flushPreview() {
+  if (previewRenderFrame) cancelAnimationFrame(previewRenderFrame);
+  previewRenderFrame = 0;
   document.getElementById("prevTajuk").innerText = document.getElementById("tajukProgram").value || "";
   document.getElementById("prevTarikh").innerText = document.getElementById("tarikhPelaksanaan").value || "";
   document.getElementById("prevMasa").innerText = document.getElementById("masa").value || "";
@@ -196,7 +236,10 @@ function updatePreview() {
 
   const hero = document.getElementById("prevImg1");
   const heroData = state.images[1].dataUrl;
-  hero.src = heroData || "";
+  if (hero.getAttribute("src") !== (heroData || null)) {
+    if (heroData) hero.src = heroData;
+    else hero.removeAttribute("src");
+  }
   hero.classList.toggle("hidden", !heroData);
 
   let hasGallery = false;
@@ -205,16 +248,17 @@ function updatePreview() {
     const box = document.getElementById(`boxImg${index}`);
     const image = document.getElementById(`prevImg${index}`);
     const caption = document.getElementById(`prevCap${index}`);
-    image.src = imageData || "";
+    if (image.getAttribute("src") !== (imageData || null)) {
+      if (imageData) image.src = imageData;
+      else image.removeAttribute("src");
+    }
     box.classList.toggle("hidden", !imageData);
     caption.innerText = document.getElementById(`kapsyen${index}`).value || `Gambar ${index}`;
     if (imageData) hasGallery = true;
   }
   document.getElementById("prevGalleryBox").classList.toggle("hidden", !hasGallery);
-  requestAnimationFrame(() => {
-    fitReportToSinglePage();
-    fitPreview();
-  });
+  fitReportToSinglePage();
+  fitPreview();
 }
 
 function fitHeroForSinglePage() {
@@ -267,6 +311,7 @@ function fitReportToSinglePage() {
 }
 
 function triggerPrint() {
+  if (previewRenderFrame) flushPreview();
   const fit = fitReportToSinglePage();
   if (fit.tooLong) {
     alert("Laporan terlalu panjang untuk satu halaman A4. Sila ringkaskan isi laporan sebelum mencetak.");
@@ -429,7 +474,41 @@ function addSelectableTextLayer(pdf, area) {
   });
 }
 
+let pdfLibraries;
+function loadPdfLibraries() {
+  if (!pdfLibraries) {
+    const dependencies = [
+      { src: "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js", ready: () => typeof window.html2canvas === "function" },
+      { src: "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js", ready: () => typeof window.jspdf?.jsPDF === "function" }
+    ];
+    pdfLibraries = Promise.all(dependencies.map(({ src, ready }) => {
+      if (ready()) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.onload = () => {
+          if (ready()) resolve();
+          else {
+            script.remove();
+            reject(new Error("Komponen PDF tidak dapat dimuatkan."));
+          }
+        };
+        script.onerror = () => {
+          script.remove();
+          reject(new Error("Komponen PDF tidak dapat dimuatkan. Sila cuba lagi."));
+        };
+        document.head.appendChild(script);
+      });
+    })).catch(error => {
+      pdfLibraries = undefined;
+      throw error;
+    });
+  }
+  return pdfLibraries;
+}
+
 async function generatePdfBlob() {
+  await loadPdfLibraries();
   const area = document.getElementById("printArea");
   const fit = fitReportToSinglePage();
   if (fit.tooLong) throw new Error("Laporan terlalu panjang untuk satu halaman A4. Sila ringkaskan isi laporan.");
@@ -493,6 +572,7 @@ function downloadBlob(blob, fileName) {
 
 async function handleSaveAndPrint(event) {
   event.preventDefault();
+  if (previewRenderFrame) flushPreview();
   const editRowId = document.getElementById("editRowId").value || "";
 
   const submitBtn = document.getElementById("submitBtn");
