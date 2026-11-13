@@ -1,55 +1,1182 @@
-<!doctype html>
-<html lang="ms">
+<!DOCTYPE html>
+<html lang="ms" class="h-full bg-slate-100">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
-<title>Penyelenggaraan Sistem | OPR SPB PPDPU</title>
-<style>
-:root{color-scheme:light;font-family:system-ui,sans-serif;color:#182b41;background:#eef2f5}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:1.25rem}
-main{width:min(100%,37rem);padding:clamp(1.5rem,6vw,3rem);background:#fff;border:1px solid #d8e1e9;border-top:5px solid #163a60;border-radius:1rem;box-shadow:0 18px 50px #173a6012}
-header{font-size:.85rem;font-weight:750;color:#315c7e}
-h1{font-size:clamp(1.65rem,5vw,2.35rem);line-height:1.15;margin:.7rem 0 1rem;letter-spacing:-.03em}
-p{line-height:1.6;margin:.8rem 0;color:#34485d}
-.reopen{padding:1rem 1.15rem;margin:1.35rem 0;background:#eef4f9;border-radius:.6rem}
-.reopen p{margin:0}.reopen time{display:block;margin-top:.25rem;font-weight:800;color:#163a60}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OPR Dashboard Sektor Pembelajaran | PPD Petaling Utama</title>
+  <link rel="icon" type="image/png" href="https://i.ibb.co/fYY58Rh2/JATA-NEGARA-PNG.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="OPR Dashboard Sektor Pembelajaran | PPD Petaling Utama">
+  <meta property="og:description" content="Sistem Laporan Ringkas Program / Aktiviti (One Page Report) Sektor Pembelajaran, PPD Petaling Utama.">
+  <meta property="og:url" content="https://ustppu.github.io/oprspbppdpu/">
+  <meta property="og:image" content="https://ustppu.github.io/oprspbppdpu/assets/opr-sektor-pembelajaran-share.jpg?v=2">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Sektor Pembelajaran | PPD Petaling Utama">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://ustppu.github.io/oprspbppdpu/assets/opr-sektor-pembelajaran-share.jpg?v=2">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
+  
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .glass-card { background: #ffffff; border: 1px solid #e2e8f0; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    #previewShell { width: 100%; overflow: hidden; }
+    #printArea {
+      width: 210mm;
+      height: 297mm;
+      box-sizing: border-box;
+      transform-origin: top left;
+      overflow: hidden;
+    }
+    #printArea.pdf-capture {
+      transform: none !important;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+    #printContent {
+      transform-origin: top left;
+    }
+    #prevImg1 {
+      object-fit: cover !important;
+      object-position: center center !important;
+    }
+    .progress-step[data-status="active"] .step-icon {
+      border-color: #0f172a;
+      color: #0f172a;
+    }
+    .progress-step[data-status="done"] .step-icon {
+      border-color: #16a34a;
+      background: #16a34a;
+      color: #fff;
+    }
+    .progress-step[data-status="error"] .step-icon {
+      border-color: #dc2626;
+      background: #dc2626;
+      color: #fff;
+    }
+    .progress-step[data-status="done"] .step-label { color: #166534; font-weight: 700; }
+    .progress-step[data-status="error"] .step-label { color: #991b1b; font-weight: 700; }
+    .cropper-view-box, .cropper-face { border-radius: 0.5rem; }
+    .officer-job-title {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
 
-body{background:radial-gradient(ellipse at top,#253c59 0%,#101c30 55%,#0c1423 100%);color:#e2e8f0;padding:1.25rem}
-main{padding:0;overflow:hidden;background:#fff;border:1px solid #61728b;border-radius:1.35rem;box-shadow:0 28px 100px #02061788}
-header{display:flex;align-items:center;gap:1rem;padding:1.2rem clamp(1.25rem,5vw,2.5rem);background:#0f172a;color:#f8fafc;font-size:.94rem}
-header img{width:58px;height:52px;object-fit:contain}header span{display:block;font-size:.78rem;color:#aebed2;font-weight:550;margin-top:.25rem}
-section{padding:clamp(1.4rem,6vw,2.5rem);color:#0f172a}
-.marker{color:#315777;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.13em}
-.reopen{border:1px solid #dbe5ef;display:flex;gap:.8rem;align-items:center}
-.reopen svg{width:26px;flex:none;color:#315c7e}.reopen time{font-variant-numeric:tabular-nums}
-footer{padding:.85rem 1.5rem;text-align:center;border-top:1px solid #e2e8f0;background:#f8fafc;color:#475569;font-size:.76rem}
-</style>
+    /* TETAPAN CETAKAN A4 STRICT 1 PAGE */
+    @page {
+      size: A4 portrait;
+      margin: 5mm 7mm;
+    }
+
+    @media print {
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      html, body {
+        background-color: #ffffff !important;
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100%;
+        overflow: hidden;
+      }
+      body * { visibility: hidden; }
+      #printArea, #printArea * { visibility: visible; }
+      #printArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        background: #ffffff !important;
+        height: 297mm !important;
+        transform: none !important;
+      }
+      .no-print { display: none !important; }
+      .page-break-avoid { page-break-inside: avoid; break-inside: avoid; }
+    }
+  </style>
 </head>
-<body>
-<main aria-labelledby="maintenance-title">
-<header><img src="https://i.ibb.co/fYY58Rh2/JATA-NEGARA-PNG.png" alt="Jata Negara Malaysia"><div>OPR Dashboard Sektor Pembelajaran<span>PPD Petaling Utama</span></div></header>
-<section>
-<div class="marker">Penyelenggaraan sistem</div>
-<h1 id="maintenance-title">Sistem sedang dikemas kini</h1>
-<p>USTP PPDPU sedang mengemas kini sistem OPR. Akses ditutup buat sementara waktu.</p>
-<div class="reopen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><p>Sistem akan dibuka semula selewat-lewatnya</p><time datetime="2026-11-15T00:01:00+08:00">15 November 2026, jam 0001 HRS</time><p>Waktu Malaysia</p></div></div>
-<p>Terima kasih atas kesabaran dan kerjasama anda.</p>
-</section>
-<footer>Unit Sumber dan Teknologi Pendidikan · PPD Petaling Utama</footer>
-</main>
-<script>
-(() => {
-  const deadline = Date.parse("2026-11-15T00:01:00+08:00");
-  const reopen = () => {
-    document.open();
-    document.write("\u003c!DOCTYPE html>\n\u003chtml lang=\"ms\" class=\"h-full bg-slate-100\">\n\u003chead>\n  \u003cmeta charset=\"UTF-8\">\n  \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  \u003ctitle>OPR Dashboard Sektor Pembelajaran | PPD Petaling Utama\u003c/title>\n  \u003clink rel=\"icon\" type=\"image/png\" href=\"https://i.ibb.co/fYY58Rh2/JATA-NEGARA-PNG.png\">\n  \u003cmeta property=\"og:type\" content=\"website\">\n  \u003cmeta property=\"og:title\" content=\"OPR Dashboard Sektor Pembelajaran | PPD Petaling Utama\">\n  \u003cmeta property=\"og:description\" content=\"Sistem Laporan Ringkas Program / Aktiviti (One Page Report) Sektor Pembelajaran, PPD Petaling Utama.\">\n  \u003cmeta property=\"og:url\" content=\"https://ustppu.github.io/oprspbppdpu/\">\n  \u003cmeta property=\"og:image\" content=\"https://ustppu.github.io/oprspbppdpu/assets/opr-sektor-pembelajaran-share.jpg?v=2\">\n  \u003cmeta property=\"og:image:width\" content=\"1200\">\n  \u003cmeta property=\"og:image:height\" content=\"630\">\n  \u003cmeta property=\"og:site_name\" content=\"Sektor Pembelajaran | PPD Petaling Utama\">\n  \u003cmeta name=\"twitter:card\" content=\"summary_large_image\">\n  \u003cmeta name=\"twitter:image\" content=\"https://ustppu.github.io/oprspbppdpu/assets/opr-sektor-pembelajaran-share.jpg?v=2\">\n  \n  \u003cscript src=\"https://cdn.tailwindcss.com\">\u003c/script>\n  \u003clink rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">\n  \u003clink href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap\" rel=\"stylesheet\">\n  \u003clink rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css\">\n  \u003cscript defer src=\"https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js\">\u003c/script>\n  \u003cscript defer src=\"https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js\">\u003c/script>\n  \u003cscript defer src=\"https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js\">\u003c/script>\n  \n  \u003cstyle>\n    body { font-family: 'Plus Jakarta Sans', sans-serif; }\n    .glass-card { background: #ffffff; border: 1px solid #e2e8f0; }\n    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }\n    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }\n    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }\n    #previewShell { width: 100%; overflow: hidden; }\n    #printArea {\n      width: 210mm;\n      height: 297mm;\n      box-sizing: border-box;\n      transform-origin: top left;\n      overflow: hidden;\n    }\n    #printArea.pdf-capture {\n      transform: none !important;\n      border: none !important;\n      border-radius: 0 !important;\n      box-shadow: none !important;\n    }\n    #printContent {\n      transform-origin: top left;\n    }\n    #prevImg1 {\n      object-fit: cover !important;\n      object-position: center center !important;\n    }\n    .progress-step[data-status=\"active\"] .step-icon {\n      border-color: #0f172a;\n      color: #0f172a;\n    }\n    .progress-step[data-status=\"done\"] .step-icon {\n      border-color: #16a34a;\n      background: #16a34a;\n      color: #fff;\n    }\n    .progress-step[data-status=\"error\"] .step-icon {\n      border-color: #dc2626;\n      background: #dc2626;\n      color: #fff;\n    }\n    .progress-step[data-status=\"done\"] .step-label { color: #166534; font-weight: 700; }\n    .progress-step[data-status=\"error\"] .step-label { color: #991b1b; font-weight: 700; }\n    .cropper-view-box, .cropper-face { border-radius: 0.5rem; }\n    .officer-job-title {\n      display: -webkit-box;\n      -webkit-box-orient: vertical;\n      -webkit-line-clamp: 2;\n      overflow: hidden;\n    }\n\n    /* TETAPAN CETAKAN A4 STRICT 1 PAGE */\n    @page {\n      size: A4 portrait;\n      margin: 5mm 7mm;\n    }\n\n    @media print {\n      * {\n        -webkit-print-color-adjust: exact !important;\n        print-color-adjust: exact !important;\n      }\n      html, body {\n        background-color: #ffffff !important;\n        background: #ffffff !important;\n        margin: 0 !important;\n        padding: 0 !important;\n        height: 100%;\n        overflow: hidden;\n      }\n      body * { visibility: hidden; }\n      #printArea, #printArea * { visibility: visible; }\n      #printArea {\n        position: absolute;\n        left: 0;\n        top: 0;\n        width: 100% !important;\n        margin: 0 !important;\n        padding: 0 !important;\n        box-shadow: none !important;\n        border: none !important;\n        border-radius: 0 !important;\n        background: #ffffff !important;\n        height: 297mm !important;\n        transform: none !important;\n      }\n      .no-print { display: none !important; }\n      .page-break-avoid { page-break-inside: avoid; break-inside: avoid; }\n    }\n  \u003c/style>\n\u003c/head>\n\u003cbody class=\"h-full flex flex-col text-slate-800\">\n\n  \u003c!-- TOP APP BAR -->\n  \u003cheader class=\"bg-slate-900 text-white shadow-md sticky top-0 z-50 no-print\">\n    \u003cdiv class=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\">\n      \u003cdiv class=\"flex flex-col gap-3 py-3 sm:h-20 sm:flex-row sm:items-center sm:justify-between sm:gap-0 sm:py-0\">\n        \n        \u003cdiv class=\"flex items-center space-x-3 sm:space-x-4\">\n          \u003cimg src=\"https://i.ibb.co/fYY58Rh2/JATA-NEGARA-PNG.png\" alt=\"Jata Negara Malaysia\" class=\"h-10 w-auto object-contain sm:h-12\">\n          \u003cdiv>\n            \u003ch1 class=\"text-sm sm:text-xl font-extrabold tracking-tight text-white\">OPR Dashboard Sektor Pembelajaran\u003c/h1>\n            \u003cp class=\"text-xs text-slate-400 font-medium\">PPD Petaling Utama\u003c/p>\n          \u003c/div>\n        \u003c/div>\n\n        \u003cnav class=\"flex w-full space-x-1 rounded-xl border border-slate-700 bg-slate-800/80 p-1 sm:w-auto sm:space-x-2 sm:p-1.5\">\n          \u003cbutton onclick=\"switchTab('dashboard')\" id=\"tab-dashboard\" class=\"flex-1 whitespace-nowrap px-2 py-2 text-xs font-semibold rounded-lg transition-all duration-200 bg-slate-100 text-slate-900 shadow sm:flex-none sm:px-4 sm:text-sm\">\n            \u003ci class=\"fa-solid fa-chart-pie mr-2\">\u003c/i>Dashboard\n          \u003c/button>\n          \u003cbutton onclick=\"switchTab('form')\" id=\"tab-form\" class=\"flex-1 whitespace-nowrap px-2 py-2 text-xs font-semibold rounded-lg transition-all duration-200 text-slate-300 hover:text-white sm:flex-none sm:px-4 sm:text-sm\">\n            \u003ci class=\"fa-solid fa-pen-to-square mr-2\">\u003c/i>Borang OPR\n          \u003c/button>\n          \u003cbutton onclick=\"switchTab('pegawai')\" id=\"tab-pegawai\" class=\"flex-1 whitespace-nowrap px-2 py-2 text-xs font-semibold rounded-lg transition-all duration-200 text-slate-300 hover:text-white sm:flex-none sm:px-4 sm:text-sm\">\n            \u003ci class=\"fa-solid fa-box-archive mr-2\">\u003c/i>Arkib OPR\n          \u003c/button>\n        \u003c/nav>\n      \u003c/div>\n    \u003c/div>\n  \u003c/header>\n\n  \u003c!-- MAIN CONTAINER -->\n  \u003cmain class=\"flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 sm:pb-24 custom-scrollbar\">\n\n    \u003c!-- ==================== TAB 1: DASHBOARD DATA ==================== -->\n    \u003csection id=\"sec-dashboard\" class=\"space-y-6 no-print\">\n      \n      \u003cdiv class=\"grid grid-cols-1 md:grid-cols-3 gap-5\">\n        \u003cdiv class=\"glass-card p-5 rounded-2xl shadow-sm flex items-center justify-between\">\n          \u003cdiv>\n            \u003cp class=\"text-xs font-bold uppercase tracking-wider text-slate-500\">Jumlah OPR Dihantar\u003c/p>\n            \u003ch3 id=\"statTotalOpr\" class=\"text-3xl font-extrabold text-slate-900 mt-1\">0\u003c/h3>\n          \u003c/div>\n          \u003cdiv class=\"w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 text-xl\">\n            \u003ci class=\"fa-solid fa-file-lines\">\u003c/i>\n          \u003c/div>\n        \u003c/div>\n\n        \u003cdiv class=\"glass-card p-5 rounded-2xl shadow-sm flex items-center justify-between\">\n          \u003cdiv>\n            \u003cp class=\"text-xs font-bold uppercase tracking-wider text-slate-500\">Pegawai Berdaftar\u003c/p>\n            \u003ch3 id=\"statTotalPegawai\" class=\"text-3xl font-extrabold text-slate-900 mt-1\">0\u003c/h3>\n          \u003c/div>\n          \u003cdiv class=\"w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 text-xl\">\n            \u003ci class=\"fa-solid fa-user-check\">\u003c/i>\n          \u003c/div>\n        \u003c/div>\n\n        \u003cdiv class=\"glass-card p-5 rounded-2xl shadow-sm flex items-center justify-between\">\n          \u003cdiv>\n            \u003cp class=\"text-xs font-bold uppercase tracking-wider text-slate-500\">Laporan Bulan Ini\u003c/p>\n            \u003ch3 id=\"statMonthOpr\" class=\"text-3xl font-extrabold text-slate-900 mt-1\">0\u003c/h3>\n          \u003c/div>\n          \u003cdiv class=\"w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 text-xl\">\n            \u003ci class=\"fa-solid fa-calendar-check\">\u003c/i>\n          \u003c/div>\n        \u003c/div>\n      \u003c/div>\n\n      \u003cdiv class=\"glass-card rounded-2xl shadow-sm overflow-hidden\">\n        \u003cdiv class=\"p-5 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50\">\n          \u003cdiv>\n            \u003ch2 class=\"text-base font-bold text-slate-900\">Senarai Laporan OPR Rekod\u003c/h2>\n            \u003cp class=\"text-xs text-slate-500\">Klik rekod untuk paparan semula, sunting atau cetak PDF.\u003c/p>\n          \u003c/div>\n\n          \u003cdiv class=\"flex items-center space-x-3\">\n            \u003cdiv class=\"relative\">\n              \u003ci class=\"fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs\">\u003c/i>\n              \u003cinput type=\"text\" id=\"searchInput\" onkeyup=\"filterTable()\" placeholder=\"Cari program atau pegawai...\" class=\"pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-slate-500 outline-none w-64\">\n            \u003c/div>\n\n            \u003cbutton onclick=\"loadData(true)\" class=\"px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-700 hover:bg-slate-100 text-xs font-semibold flex items-center space-x-1.5 transition\">\n              \u003ci id=\"refreshSpinner\" class=\"fa-solid fa-rotate\">\u003c/i>\n              \u003cspan>Refresh\u003c/span>\n            \u003c/button>\n          \u003c/div>\n        \u003c/div>\n\n        \u003cdiv class=\"overflow-x-auto\">\n          \u003ctable class=\"w-full text-left border-collapse\">\n            \u003cthead>\n              \u003ctr class=\"bg-slate-100 border-b border-slate-200 text-[11px] font-bold text-slate-600 uppercase tracking-wider\">\n                \u003cth class=\"py-3 px-4\">Tarikh & Masa\u003c/th>\n                \u003cth class=\"py-3 px-4\">Tajuk Program\u003c/th>\n                \u003cth class=\"py-3 px-4\">Tarikh Pelaksanaan\u003c/th>\n                \u003cth class=\"py-3 px-4\">Pegawai Pelapor\u003c/th>\n                \u003cth class=\"py-3 px-4 text-center\">Tindakan\u003c/th>\n              \u003c/tr>\n            \u003c/thead>\n            \u003ctbody id=\"oprTableBody\" class=\"divide-y divide-slate-200 text-xs\">\n              \u003ctr>\n                \u003ctd colspan=\"5\" class=\"py-12 text-center text-slate-400\">\n                  \u003ci class=\"fa-solid fa-spinner fa-spin text-2xl mb-2 text-slate-600\">\u003c/i>\n                  \u003cp>Memuatkan data laporan...\u003c/p>\n                \u003c/td>\n              \u003c/tr>\n            \u003c/tbody>\n          \u003c/table>\n        \u003c/div>\n      \u003c/div>\n    \u003c/section>\n\n    \u003c!-- ==================== TAB 2: OPR BARU (FORM & PREVIEW) ==================== -->\n    \u003csection id=\"sec-form\" class=\"hidden space-y-6\">\n      \u003cdiv class=\"grid grid-cols-1 lg:grid-cols-12 gap-8\">\n        \n        \u003c!-- BORANG INPUT (NO PRINT) -->\n        \u003cdiv class=\"lg:col-span-6 glass-card p-6 rounded-2xl shadow-sm space-y-5 no-print\">\n          \u003cdiv class=\"border-b border-slate-200 pb-4 flex items-center justify-between\">\n            \u003cdiv>\n              \u003ch2 class=\"text-lg font-bold text-slate-900\">Borang Laporan OPR\u003c/h2>\n              \u003cp class=\"text-xs text-slate-500\">Isi borang di bawah. Pratonton di sebelah kanan dikemaskini secara langsung.\u003c/p>\n            \u003c/div>\n            \n            \u003cbutton type=\"button\" onclick=\"resetOprForm()\" class=\"px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-300 transition flex items-center space-x-1\">\n              \u003ci class=\"fa-solid fa-rotate-left\">\u003c/i>\n              \u003cspan>Reset\u003c/span>\n            \u003c/button>\n          \u003c/div>\n\n          \u003cform id=\"oprForm\" onsubmit=\"handleSaveAndPrint(event)\" class=\"space-y-4\">\n            \n            \u003cinput type=\"hidden\" id=\"editRowId\" value=\"\">\n\n            \u003cdiv class=\"bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3\">\n              \u003ch3 class=\"text-xs font-bold uppercase text-slate-700\">Maklumat Pelapor\u003c/h3>\n              \n              \u003cdiv class=\"grid grid-cols-1 md:grid-cols-2 gap-3\">\n                \u003cdiv class=\"relative\">\n                  \u003clabel class=\"block text-xs font-semibold text-slate-700 mb-1\">Nama Pegawai *\u003c/label>\n                  \u003cinput type=\"text\" id=\"namaPegawai\" oninput=\"filterPegawaiSuggestions()\" onfocus=\"filterPegawaiSuggestions()\" autocomplete=\"off\" required placeholder=\"Taip nama pegawai...\" class=\"w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-slate-500 outline-none\">\n                  \u003cdiv id=\"pegawaiSuggestions\" class=\"hidden absolute z-30 left-0 right-0 mt-1 max-h-52 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl custom-scrollbar\">\u003c/div>\n                \u003c/div>\n\n                \u003cdiv>\n                  \u003clabel class=\"block text-xs font-semibold text-slate-700 mb-1\">Jawatan *\u003c/label>\n                  \u003cinput type=\"text\" id=\"jawatanPegawai\" oninput=\"updatePreview()\" required placeholder=\"Jawatan\" class=\"w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none\">\n                \u003c/div>\n              \u003c/div>\n\n              \u003cdiv>\n                \u003clabel class=\"block text-xs font-semibold text-slate-700 mb-1\">Tarikh Laporan Disediakan *\u003c/label>\n                \u003cinput type=\"date\" id=\"tarikhLaporan\" onchange=\"updatePreview()\" required class=\"w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none\">\n              \u003c/div>\n\n            \u003c/div>\n\n            \u003cdiv class=\"space-y-3\">\n              \u003ch3 class=\"text-xs font-bold uppercase text-slate-700\">Butiran Program\u003c/h3>\n\n              \u003cdiv>\n                \u003clabel class=\"block text-xs font-semibold text-slate-700 mb-1\">Tajuk Program / Aktiviti *\u003c/label>\n                \u003cinput type=\"text\" id=\"tajukProgram\" oninput=\"updatePreview()\" required placeholder=\"Cth: BENGKEL AI STEM UNTUK GKMP\" class=\"w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none\">\n              \u003c/div>\n\n              \u003cdiv class=\"grid grid-cols-1 md:grid-cols-2 gap-3\">\n                \u003cdiv>\n                  \u003clabel class=\"block text-xs font-semibold text-slate-700 mb-1\">Tarikh Pelaksanaan *\u003c/label>\n                  \u003cinput type=\"text\" id=\"tarikhPelaksanaan\" oninput=\"updatePreview()\" required placeholder=\"Cth: 11 OGOS 2026\" class=\"w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none\">\n                \u003c/div>\n                \u003cdiv>\n                  \u003clabel class=\"block text-xs font-semibold text-slate-700 mb-1\">Masa Pelaksanaan *\u003c/label>\n                  \u003cinput type=\"text\" id=\"masa\" oninput=\"updatePreview()\" required placeholder=\"Cth: 8.00 PAGI - 5.00 PETANG\" class=\"w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none\">\n                \u003c/div>\n              \u003c/div>\n\n              \u003cdiv class=\"grid grid-cols-1 md:grid-cols-2 gap-3\">\n                \u003cdiv>\n                  \u003clabel class=\"block text-xs font-semibold text-slate-700 mb-1\">Kumpulan Sasaran *\u003c/label>\n                  \u003cinput type=\"text\" id=\"sasaran\" oninput=\"updatePreview()\" required placeholder=\"Cth: 70 GURU STEM\" class=\"w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none\">\n                \u003c/div>\n                \u003cdiv>\n                  \u003clabel class=\"block text-xs font-semibold text-slate-700 mb-1\">Penglibatan Pihak Luar / Kerjasama\u003c/label>\n                  \u003cinput type=\"text\" id=\"pelibatan\" oninput=\"updatePreview()\" placeholder=\"Cth: GOOGLE DAN APPLE\" class=\"w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none\">\n                \u003c/div>\n              \u003c/div>\n            \u003c/div>\n\n            \u003c!-- OBJEKTIF, KEKUATAN & PENAMBAHBAIKAN -->\n            \u003cdiv class=\"space-y-3\">\n              \u003cdiv>\n                \u003cdiv class=\"flex items-center justify-between mb-1\">\n                  \u003clabel class=\"text-xs font-semibold text-slate-700\">Objektif Program *\u003c/label>\n                  \u003cbutton type=\"button\" onclick=\"getAISuggestion('objektif')\" class=\"px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded border border-slate-300\" title=\"Jana cadangan baharu\">\n                    \u003ci class=\"fa-solid fa-wand-magic-sparkles mr-1\">\u003c/i>Cadangan\n                  \u003c/button>\n                \u003c/div>\n                \u003cdiv class=\"relative\">\n                  \u003ctextarea id=\"objektif\" oninput=\"handleStructuredInput(this, 'objektif')\" onkeydown=\"handleStructuredEnter(event, 'objektif')\" rows=\"3\" required placeholder=\"1. ...&#10;2. ...\" class=\"w-full bg-white border border-slate-300 rounded-xl p-2.5 pr-8 text-xs outline-none\">\u003c/textarea>\n                  \u003cbutton type=\"button\" onclick=\"clearField('objektif')\" class=\"absolute top-2 right-2 text-slate-400 hover:text-slate-700 w-5 h-5 flex items-center justify-center\">\n                    \u003ci class=\"fa-solid fa-xmark text-xs\">\u003c/i>\n                  \u003c/button>\n                \u003c/div>\n              \u003c/div>\n\n              \u003cdiv>\n                \u003cdiv class=\"flex items-center justify-between mb-1\">\n                  \u003clabel class=\"text-xs font-semibold text-slate-700\">Kekuatan Program *\u003c/label>\n                  \u003cbutton type=\"button\" onclick=\"getAISuggestion('kekuatan')\" class=\"px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded border border-slate-300\" title=\"Jana cadangan baharu\">\n                    \u003ci class=\"fa-solid fa-wand-magic-sparkles mr-1\">\u003c/i>Cadangan\n                  \u003c/button>\n                \u003c/div>\n                \u003cdiv class=\"relative\">\n                  \u003ctextarea id=\"kekuatan\" oninput=\"handleStructuredInput(this, 'bullet')\" onkeydown=\"handleStructuredEnter(event, 'bullet')\" rows=\"3\" required placeholder=\"● ...\" class=\"w-full bg-white border border-slate-300 rounded-xl p-2.5 pr-8 text-xs outline-none\">\u003c/textarea>\n                  \u003cbutton type=\"button\" onclick=\"clearField('kekuatan')\" class=\"absolute top-2 right-2 text-slate-400 hover:text-slate-700 w-5 h-5 flex items-center justify-center\">\n                    \u003ci class=\"fa-solid fa-xmark text-xs\">\u003c/i>\n                  \u003c/button>\n                \u003c/div>\n              \u003c/div>\n\n              \u003cdiv>\n                \u003cdiv class=\"flex items-center justify-between mb-1\">\n                  \u003clabel class=\"text-xs font-semibold text-slate-700\">Penambahbaikan & Cadangan *\u003c/label>\n                  \u003cbutton type=\"button\" onclick=\"getAISuggestion('penambahbaikan')\" class=\"px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded border border-slate-300\" title=\"Jana cadangan baharu\">\n                    \u003ci class=\"fa-solid fa-wand-magic-sparkles mr-1\">\u003c/i>Cadangan\n                  \u003c/button>\n                \u003c/div>\n                \u003cdiv class=\"relative\">\n                  \u003ctextarea id=\"penambahbaikan\" oninput=\"handleStructuredInput(this, 'bullet')\" onkeydown=\"handleStructuredEnter(event, 'bullet')\" rows=\"3\" required placeholder=\"● ...\" class=\"w-full bg-white border border-slate-300 rounded-xl p-2.5 pr-8 text-xs outline-none\">\u003c/textarea>\n                  \u003cbutton type=\"button\" onclick=\"clearField('penambahbaikan')\" class=\"absolute top-2 right-2 text-slate-400 hover:text-slate-700 w-5 h-5 flex items-center justify-center\">\n                    \u003ci class=\"fa-solid fa-xmark text-xs\">\u003c/i>\n                  \u003c/button>\n                \u003c/div>\n              \u003c/div>\n            \u003c/div>\n\n            \u003c!-- GAMBAR & KAPSYEN -->\n            \u003cdiv class=\"space-y-3\">\n              \u003ch3 class=\"text-xs font-bold uppercase text-slate-700\">Lampiran Gambar\u003c/h3>\n              \u003cp class=\"text-[11px] text-slate-500 italic\">Disyorkan gambar format melintang (landscape).\u003c/p>\n\n              \u003cdiv class=\"p-3 border border-slate-300 rounded-xl bg-slate-50 space-y-2\">\n                \u003cspan class=\"text-xs font-bold text-slate-800 block\">Gambar 1 (Hero Utama)\u003c/span>\n                \u003cinput type=\"file\" id=\"fileImg1\" accept=\"image/*\" onchange=\"processAndUploadImage(event, 1)\" class=\"text-xs text-slate-600\">\n                \u003cbutton type=\"button\" id=\"editImgBtn1\" onclick=\"openImageEditor(1)\" class=\"hidden px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-[11px] font-bold text-slate-700 hover:bg-slate-100\">\u003ci class=\"fa-solid fa-arrows-up-down-left-right mr-1\">\u003c/i>Reposition\u003c/button>\n              \u003c/div>\n\n              \u003cdiv class=\"grid grid-cols-1 md:grid-cols-3 gap-2\">\n                \u003cdiv class=\"p-2.5 border border-slate-300 rounded-xl bg-slate-50 space-y-1.5\">\n                  \u003cspan class=\"text-[11px] font-bold text-slate-700 block\">Gambar 2\u003c/span>\n                  \u003cinput type=\"file\" id=\"fileImg2\" accept=\"image/*\" onchange=\"processAndUploadImage(event, 2)\" class=\"text-[10px] text-slate-600 w-full\">\n                  \u003cinput type=\"text\" id=\"kapsyen2\" oninput=\"updatePreview()\" placeholder=\"Kapsyen 2\" class=\"w-full bg-white border border-slate-300 rounded px-2 py-1 text-[11px]\">\n                  \u003cbutton type=\"button\" id=\"editImgBtn2\" onclick=\"openImageEditor(2)\" class=\"hidden px-2 py-1 bg-white border border-slate-300 rounded text-[10px] font-bold text-slate-700\">\u003ci class=\"fa-solid fa-arrows-up-down-left-right mr-1\">\u003c/i>Reposition\u003c/button>\n                \u003c/div>\n\n                \u003cdiv class=\"p-2.5 border border-slate-300 rounded-xl bg-slate-50 space-y-1.5\">\n                  \u003cspan class=\"text-[11px] font-bold text-slate-700 block\">Gambar 3\u003c/span>\n                  \u003cinput type=\"file\" id=\"fileImg3\" accept=\"image/*\" onchange=\"processAndUploadImage(event, 3)\" class=\"text-[10px] text-slate-600 w-full\">\n                  \u003cinput type=\"text\" id=\"kapsyen3\" oninput=\"updatePreview()\" placeholder=\"Kapsyen 3\" class=\"w-full bg-white border border-slate-300 rounded px-2 py-1 text-[11px]\">\n                  \u003cbutton type=\"button\" id=\"editImgBtn3\" onclick=\"openImageEditor(3)\" class=\"hidden px-2 py-1 bg-white border border-slate-300 rounded text-[10px] font-bold text-slate-700\">\u003ci class=\"fa-solid fa-arrows-up-down-left-right mr-1\">\u003c/i>Reposition\u003c/button>\n                \u003c/div>\n\n                \u003cdiv class=\"p-2.5 border border-slate-300 rounded-xl bg-slate-50 space-y-1.5\">\n                  \u003cspan class=\"text-[11px] font-bold text-slate-700 block\">Gambar 4\u003c/span>\n                  \u003cinput type=\"file\" id=\"fileImg4\" accept=\"image/*\" onchange=\"processAndUploadImage(event, 4)\" class=\"text-[10px] text-slate-600 w-full\">\n                  \u003cinput type=\"text\" id=\"kapsyen4\" oninput=\"updatePreview()\" placeholder=\"Kapsyen 4\" class=\"w-full bg-white border border-slate-300 rounded px-2 py-1 text-[11px]\">\n                  \u003cbutton type=\"button\" id=\"editImgBtn4\" onclick=\"openImageEditor(4)\" class=\"hidden px-2 py-1 bg-white border border-slate-300 rounded text-[10px] font-bold text-slate-700\">\u003ci class=\"fa-solid fa-arrows-up-down-left-right mr-1\">\u003c/i>Reposition\u003c/button>\n                \u003c/div>\n              \u003c/div>\n            \u003c/div>\n\n            \u003c!-- BUTANG SIMPAN & CETAK -->\n            \u003cdiv class=\"pt-2 flex items-center space-x-3\">\n              \u003cbutton type=\"submit\" id=\"submitBtn\" class=\"flex-1 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow transition flex items-center justify-center space-x-2 text-xs\">\n                \u003ci class=\"fa-solid fa-file-arrow-down\">\u003c/i>\n                \u003cspan id=\"submitBtnText\">Simpan Laporan & Muat Turun PDF\u003c/span>\n              \u003c/button>\n            \u003c/div>\n          \u003c/form>\n        \u003c/div>\n\n        \u003c!-- LIVE PREVIEW & PRINT AREA -->\n        \u003cdiv class=\"lg:col-span-6 space-y-4\">\n          \u003cdiv class=\"sticky top-28 space-y-3\">\n            \u003cdiv class=\"flex items-center justify-between no-print\">\n              \u003ch3 class=\"text-xs font-bold text-slate-700 uppercase flex items-center space-x-1.5\">\n                \u003ci class=\"fa-solid fa-eye text-slate-900\">\u003c/i> \u003cspan>Pratonton Laporan OPR\u003c/span>\n              \u003c/h3>\n              \u003cbutton onclick=\"triggerPrint()\" class=\"px-3 py-1 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs rounded-lg border border-slate-300\">\n                \u003ci class=\"fa-solid fa-print mr-1\">\u003c/i> Cetak PDF Sahaja\n              \u003c/button>\n            \u003c/div>\n\n            \u003c!-- CONTAINER PRATONTON STRICT 1 PAGE A4 -->\n            \u003cdiv id=\"previewShell\">\n            \u003cp id=\"reportFitNotice\" class=\"hidden mb-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] font-semibold text-amber-800\">Kandungan terlalu panjang untuk satu halaman A4. Sila ringkaskan isi laporan sebelum menjana PDF.\u003c/p>\n            \u003cdiv id=\"printArea\" class=\"bg-white border border-slate-300 shadow-lg rounded-2xl p-4 text-slate-900 text-[8.5pt] font-sans leading-tight print:border-none print:shadow-none print:rounded-none print:p-0\">\n              \u003cdiv id=\"printContent\" class=\"space-y-2\">\n              \n              \u003c!-- HEADER TERKEMAS -->\n              \u003cdiv class=\"grid grid-cols-[140px_1fr_140px] items-center pb-2 border-b border-slate-300 page-break-avoid\">\n                \u003cimg src=\"assets/logo-ppdpu.png\" class=\"h-[60px] w-[140px] max-w-full object-contain object-center justify-self-start\" alt=\"Logo Kementerian Pendidikan Malaysia dan PPD Petaling Utama\">\n                \u003cdiv class=\"text-center\">\n                  \u003ch4 class=\"whitespace-nowrap font-extrabold text-[8.7pt] uppercase tracking-normal text-slate-900 leading-tight\">\n                    LAPORAN RINGKAS PROGRAM / AKTIVITI (ONE PAGE REPORT)\n                  \u003c/h4>\n                  \u003cp class=\"text-[8pt] text-slate-700 font-bold uppercase mt-0.5\">PEJABAT PENDIDIKAN DAERAH PETALING UTAMA\u003c/p>\n                  \u003cp class=\"text-[7pt] text-slate-500 italic mt-0.5 font-normal\">\"PENDIDIKAN BERMUTU, INSAN TERDIDIK, NEGARA SEJAHTERA\"\u003c/p>\n                \u003c/div>\n                \u003cdiv aria-hidden=\"true\">\u003c/div>\n              \u003c/div>\n\n              \u003c!-- HERO IMAGE -->\n              \u003cdiv id=\"prevHeroBox\" class=\"relative w-full aspect-video bg-slate-900 rounded-lg overflow-hidden flex items-end page-break-avoid border border-slate-800\">\n                \u003cimg id=\"prevImg1\" class=\"absolute inset-0 w-full h-full object-cover object-center hidden\">\n                \u003cdiv class=\"relative z-10 w-full bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent p-2.5 text-white\">\n                  \u003ch2 id=\"prevTajuk\" class=\"text-xs sm:text-sm font-extrabold uppercase tracking-wide leading-tight text-white\">\u003c/h2>\n                \u003c/div>\n              \u003c/div>\n\n              \u003c!-- MAKLUMAT PROGRAM -->\n              \u003cdiv class=\"border border-slate-300 rounded-md bg-slate-50 page-break-avoid text-[7.5pt]\">\n                \u003cdiv class=\"flex flex-wrap items-stretch justify-center divide-x divide-slate-300 text-slate-800\">\n                  \u003cdiv class=\"px-3 pt-1.5 pb-2 text-center leading-[1.35]\">\u003cspan class=\"block text-[5.5pt] font-extrabold tracking-[0.12em] text-slate-500\">TARIKH\u003c/span>\u003cspan id=\"prevTarikh\" class=\"block mt-0.5 font-bold leading-tight\">\u003c/span>\u003c/div>\n                  \u003cdiv class=\"px-3 pt-1.5 pb-2 text-center leading-[1.35]\">\u003cspan class=\"block text-[5.5pt] font-extrabold tracking-[0.12em] text-slate-500\">MASA\u003c/span>\u003cspan id=\"prevMasa\" class=\"block mt-0.5 font-bold leading-tight\">\u003c/span>\u003c/div>\n                  \u003cdiv class=\"px-3 pt-1.5 pb-2 text-center leading-[1.35]\">\u003cspan class=\"block text-[5.5pt] font-extrabold tracking-[0.12em] text-slate-500\">SASARAN\u003c/span>\u003cspan id=\"prevSasaran\" class=\"block mt-0.5 font-bold leading-tight\">\u003c/span>\u003c/div>\n                  \u003cdiv id=\"prevPelibatanBox\" class=\"hidden px-3 pt-1.5 pb-2 text-center leading-[1.35]\">\u003cspan class=\"block text-[5.5pt] font-extrabold tracking-[0.12em] text-slate-500\">KERJASAMA\u003c/span>\u003cspan id=\"prevPelibatan\" class=\"block mt-0.5 font-bold leading-tight\">\u003c/span>\u003c/div>\n                \u003c/div>\n              \u003c/div>\n\n              \u003c!-- KAD OBJEKTIF -->\n              \u003cdiv class=\"border border-slate-300 rounded-lg p-2 bg-slate-50/50 page-break-avoid\">\n                \u003cp class=\"font-extrabold text-slate-900 text-[8pt] border-b border-slate-200 pb-0.5 uppercase\">OBJEKTIF PROGRAM\u003c/p>\n                \u003cp id=\"prevObjektif\" class=\"whitespace-pre-wrap text-slate-800 mt-0.5 text-[8pt] leading-normal\">\u003c/p>\n              \u003c/div>\n\n              \u003c!-- KAD KEKUATAN -->\n              \u003cdiv class=\"border border-slate-300 rounded-lg p-2 bg-slate-50/50 page-break-avoid\">\n                \u003cp class=\"font-extrabold text-slate-900 text-[8pt] border-b border-slate-200 pb-0.5 uppercase\">KEKUATAN PROGRAM\u003c/p>\n                \u003cp id=\"prevKekuatan\" class=\"whitespace-pre-wrap text-slate-800 mt-0.5 text-[8pt] leading-normal\">\u003c/p>\n              \u003c/div>\n\n              \u003c!-- KAD PENAMBAHBAIKAN -->\n              \u003cdiv class=\"border border-slate-300 rounded-lg p-2 bg-slate-50/50 page-break-avoid\">\n                \u003cp class=\"font-extrabold text-slate-900 text-[8pt] border-b border-slate-200 pb-0.5 uppercase\">PENAMBAHBAIKAN & CADANGAN\u003c/p>\n                \u003cp id=\"prevPenambahbaikan\" class=\"whitespace-pre-wrap text-slate-800 mt-0.5 text-[8pt] leading-normal\">\u003c/p>\n              \u003c/div>\n\n              \u003c!-- GAMBAR GRID LAMPIRAN BERGAMBAR -->\n              \u003cdiv id=\"prevGalleryBox\" class=\"border border-slate-300 rounded-lg p-2 bg-white space-y-1 page-break-avoid hidden\">\n                \u003cp class=\"font-bold text-slate-900 text-[7.5pt] uppercase\">📸 LAMPIRAN BERGAMBAR\u003c/p>\n                \n                \u003cdiv class=\"grid grid-cols-3 gap-2\">\n                  \u003cdiv id=\"boxImg2\" class=\"border border-slate-200 rounded p-1 text-center bg-slate-50 hidden\">\n                    \u003cimg id=\"prevImg2\" class=\"aspect-[4/3] w-full object-cover object-center rounded\">\n                    \u003cspan id=\"prevCap2\" class=\"text-[7pt] text-slate-600 italic block mt-0.5 font-medium truncate\">\u003c/span>\n                  \u003c/div>\n\n                  \u003cdiv id=\"boxImg3\" class=\"border border-slate-200 rounded p-1 text-center bg-slate-50 hidden\">\n                    \u003cimg id=\"prevImg3\" class=\"aspect-[4/3] w-full object-cover object-center rounded\">\n                    \u003cspan id=\"prevCap3\" class=\"text-[7pt] text-slate-600 italic block mt-0.5 font-medium truncate\">\u003c/span>\n                  \u003c/div>\n\n                  \u003cdiv id=\"boxImg4\" class=\"border border-slate-200 rounded p-1 text-center bg-slate-50 hidden\">\n                    \u003cimg id=\"prevImg4\" class=\"aspect-[4/3] w-full object-cover object-center rounded\">\n                    \u003cspan id=\"prevCap4\" class=\"text-[7pt] text-slate-600 italic block mt-0.5 font-medium truncate\">\u003c/span>\n                  \u003c/div>\n                \u003c/div>\n              \u003c/div>\n\n              \u003c!-- FOOTER PREVIEW -->\n              \u003cdiv class=\"pt-1.5 border-t border-slate-300 text-[7.5pt] text-slate-700 flex justify-between items-end page-break-avoid\">\n                \u003cdiv>\n                  \u003cp>\u003cstrong>Disediakan oleh:\u003c/strong> \u003cspan id=\"prevNama\" class=\"font-bold\">\u003c/span> (\u003cspan id=\"prevJawatan\">\u003c/span>)\u003c/p>\n                  \u003cp>\u003cstrong>Tarikh Laporan:\u003c/strong> \u003cspan id=\"prevTarikhLaporan\">\u003c/span>\u003c/p>\n                \u003c/div>\n                \u003cdiv class=\"text-right text-[6.5pt] text-slate-400\">\n                  Sektor Pembelajaran | PPD Petaling Utama\n                \u003c/div>\n              \u003c/div>\n\n              \u003c/div>\n            \u003c/div>\n            \u003c/div>\n          \u003c/div>\n        \u003c/div>\n\n      \u003c/div>\n    \u003c/section>\n\n    \u003c!-- ==================== TAB 3: ARKIB OPR ==================== -->\n    \u003csection id=\"sec-pegawai\" class=\"hidden space-y-6 no-print\">\n      \u003cdiv class=\"glass-card p-6 rounded-2xl shadow-sm\">\n        \u003ch2 class=\"text-lg font-bold text-slate-900 mb-1\">Arkib OPR Pegawai\u003c/h2>\n        \u003cp class=\"text-xs text-slate-500 mb-6\">Pilih pegawai untuk melihat sejarah laporan atau membuat cetakan semula.\u003c/p>\n\n        \u003cdiv id=\"pegawaiGrid\" class=\"grid grid-cols-1 md:grid-cols-3 gap-5\">\u003c/div>\n      \u003c/div>\n    \u003c/section>\n\n  \u003c/main>\n\n  \u003cfooter class=\"fixed inset-x-0 bottom-0 z-40 border-t border-white/15 bg-slate-950/75 text-slate-200 backdrop-blur-md no-print\">\n    \u003cdiv class=\"mx-auto flex h-8 max-w-7xl items-center justify-center px-4 text-[10px] font-semibold tracking-wide sm:h-11 sm:justify-end sm:px-6 sm:text-xs lg:px-8\">\n      Sektor Pembelajaran | PPD Petaling Utama\n    \u003c/div>\n  \u003c/footer>\n\n  \u003c!-- MODAL HISTORY PEGAWAI (NO PRINT) -->\n  \u003cdiv id=\"historyModal\" class=\"fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print\">\n    \u003cdiv class=\"bg-white rounded-2xl max-w-3xl w-full p-6 shadow-2xl border border-slate-200 max-h-[85vh] flex flex-col\">\n      \u003cdiv class=\"flex justify-between items-center pb-4 border-b border-slate-200\">\n        \u003cdiv>\n          \u003ch3 id=\"modalPegawaiName\" class=\"text-lg font-bold text-slate-900\">Sejarah OPR Pegawai\u003c/h3>\n          \u003cp id=\"modalPegawaiJawatan\" class=\"text-xs text-slate-500\">\u003c/p>\n        \u003c/div>\n        \u003cbutton onclick=\"closeModal()\" class=\"text-slate-400 hover:text-slate-600 text-lg w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center\">\u003ci class=\"fa-solid fa-xmark\">\u003c/i>\u003c/button>\n      \u003c/div>\n\n      \u003cdiv id=\"modalOprList\" class=\"flex-1 overflow-y-auto py-4 space-y-3 custom-scrollbar\">\u003c/div>\n    \u003c/div>\n  \u003c/div>\n\n  \u003c!-- EDITOR GAMBAR -->\n  \u003cdiv id=\"imageEditorModal\" class=\"fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[70] hidden items-center justify-center p-4 no-print\">\n    \u003cdiv class=\"bg-white rounded-2xl w-full max-w-3xl shadow-2xl overflow-hidden\">\n      \u003cdiv class=\"flex items-center justify-between px-5 py-4 border-b border-slate-200\">\n        \u003cdiv>\n          \u003ch3 class=\"font-extrabold text-slate-900\">Kedudukan Gambar\u003c/h3>\n          \u003cp class=\"text-xs text-slate-500\">Tarik gambar untuk menetapkan kedudukan yang akan muncul dalam pratonton dan PDF.\u003c/p>\n        \u003c/div>\n        \u003cbutton type=\"button\" onclick=\"closeImageEditor()\" class=\"w-9 h-9 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200\">\u003ci class=\"fa-solid fa-xmark\">\u003c/i>\u003c/button>\n      \u003c/div>\n      \u003cdiv class=\"h-[55vh] min-h-[320px] bg-slate-950 p-3\">\n        \u003cimg id=\"cropperImage\" alt=\"Editor gambar\" class=\"max-w-full block\">\n      \u003c/div>\n      \u003cdiv class=\"px-5 py-4 flex flex-wrap items-center justify-between gap-3\">\n        \u003cdiv class=\"flex items-center gap-2\">\n          \u003cbutton type=\"button\" onclick=\"cropReset()\" class=\"px-3 py-2 rounded-lg border border-slate-300 text-xs font-bold\">\u003ci class=\"fa-solid fa-rotate-left mr-1\">\u003c/i>Kembali Asal\u003c/button>\n        \u003c/div>\n        \u003cdiv class=\"flex items-center gap-2\">\n          \u003cbutton type=\"button\" onclick=\"closeImageEditor()\" class=\"px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold\">Batal\u003c/button>\n          \u003cbutton type=\"button\" onclick=\"applyImageCrop()\" class=\"px-4 py-2 rounded-lg bg-slate-900 text-white text-xs font-bold\">\u003ci class=\"fa-solid fa-check mr-1\">\u003c/i>Gunakan Gambar\u003c/button>\n        \u003c/div>\n      \u003c/div>\n    \u003c/div>\n  \u003c/div>\n\n  \u003c!-- STATUS SIMPAN & PDF -->\n  \u003cdiv id=\"saveProgressModal\" class=\"fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[80] hidden items-center justify-center p-4 no-print\">\n    \u003cdiv class=\"bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl\">\n      \u003ch3 class=\"text-lg font-extrabold text-slate-900\">Menyediakan Laporan OPR\u003c/h3>\n      \u003cp class=\"text-xs text-slate-500 mt-1\">Jangan tutup halaman sehingga semua langkah selesai.\u003c/p>\n      \u003cdiv class=\"mt-5 space-y-3\">\n        \u003cdiv id=\"step-images\" class=\"progress-step flex items-center gap-3\" data-status=\"pending\">\n          \u003cspan class=\"step-icon w-8 h-8 rounded-full border-2 border-slate-300 text-slate-400 flex items-center justify-center shrink-0\">\u003ci class=\"fa-solid fa-image\">\u003c/i>\u003c/span>\n          \u003cspan class=\"step-label text-sm text-slate-600\">Memproses gambar…\u003c/span>\n        \u003c/div>\n        \u003cdiv id=\"step-pdf\" class=\"progress-step flex items-center gap-3\" data-status=\"pending\">\n          \u003cspan class=\"step-icon w-8 h-8 rounded-full border-2 border-slate-300 text-slate-400 flex items-center justify-center shrink-0\">\u003ci class=\"fa-solid fa-file-pdf\">\u003c/i>\u003c/span>\n          \u003cspan class=\"step-label text-sm text-slate-600\">Menjana PDF…\u003c/span>\n        \u003c/div>\n        \u003cdiv id=\"step-drive\" class=\"progress-step flex items-center gap-3\" data-status=\"pending\">\n          \u003cspan class=\"step-icon w-8 h-8 rounded-full border-2 border-slate-300 text-slate-400 flex items-center justify-center shrink-0\">\u003ci class=\"fa-brands fa-google-drive\">\u003c/i>\u003c/span>\n          \u003cspan class=\"step-label text-sm text-slate-600\">Menyimpan ke Drive…\u003c/span>\n        \u003c/div>\n        \u003cdiv id=\"step-done\" class=\"progress-step flex items-center gap-3\" data-status=\"pending\">\n          \u003cspan class=\"step-icon w-8 h-8 rounded-full border-2 border-slate-300 text-slate-400 flex items-center justify-center shrink-0\">\u003ci class=\"fa-solid fa-flag-checkered\">\u003c/i>\u003c/span>\n          \u003cspan class=\"step-label text-sm text-slate-600\">Selesai\u003c/span>\n        \u003c/div>\n      \u003c/div>\n      \u003cp id=\"saveProgressMessage\" class=\"hidden mt-4 rounded-lg bg-red-50 border border-red-200 p-3 text-xs text-red-700\">\u003c/p>\n      \u003cbutton id=\"closeProgressBtn\" type=\"button\" onclick=\"closeSaveProgress()\" class=\"hidden mt-4 w-full py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold\">Tutup\u003c/button>\n    \u003c/div>\n  \u003c/div>\n\n  \u003cscript>\n    const GAS_WEB_APP_URL = \"https://script.google.com/macros/s/AKfycbweu_PDwEIGHcY8qateu_CmmQx__4JGIAu2BjD9jiRoPuX0so_if183wZ9eWALwLnomdQ/exec\";\n\n    let state = {\n      pegawai: [],\n      respon: [],\n      images: { 1: null, 2: null, 3: null, 4: null }\n    };\n\n    document.addEventListener(\"DOMContentLoaded\", function() {\n      const today = new Date().toISOString().split('T')[0];\n      document.getElementById(\"tarikhLaporan\").value = today;\n      loadData();\n      updatePreview();\n    });\n\n    function switchTab(tab) {\n      document.getElementById(\"sec-dashboard\").classList.add(\"hidden\");\n      document.getElementById(\"sec-form\").classList.add(\"hidden\");\n      document.getElementById(\"sec-pegawai\").classList.add(\"hidden\");\n\n      const inactiveTabClass = \"flex-1 whitespace-nowrap px-2 py-2 text-xs font-semibold rounded-lg transition-all text-slate-300 hover:text-white sm:flex-none sm:px-4 sm:text-sm\";\n      const activeTabClass = \"flex-1 whitespace-nowrap px-2 py-2 text-xs font-semibold rounded-lg transition-all bg-slate-100 text-slate-900 shadow sm:flex-none sm:px-4 sm:text-sm\";\n      document.getElementById(\"tab-dashboard\").className = inactiveTabClass;\n      document.getElementById(\"tab-form\").className = inactiveTabClass;\n      document.getElementById(\"tab-pegawai\").className = inactiveTabClass;\n\n      document.getElementById(\"sec-\" + tab).classList.remove(\"hidden\");\n      const activeBtn = document.getElementById(\"tab-\" + tab);\n      activeBtn.className = activeTabClass;\n      if (tab === \"form\") requestAnimationFrame(() => updatePreview());\n    }\n\n    // Helper penukar format tarikh kepada YYYY-MM-DD\n    function formatDateForInput(dateStr) {\n      if (!dateStr) return \"\";\n      const d = new Date(dateStr);\n      if (!isNaN(d.getTime())) {\n        const year = d.getFullYear();\n        const month = String(d.getMonth() + 1).padStart(2, '0');\n        const day = String(d.getDate()).padStart(2, '0');\n        return `${year}-${month}-${day}`;\n      }\n      const match = String(dateStr).match(/\\d{4}-\\d{2}-\\d{2}/);\n      return match ? match[0] : \"\";\n    }\n\n    async function loadData(isRefresh = false) {\n      const refreshSpinner = document.getElementById(\"refreshSpinner\");\n      if (isRefresh && refreshSpinner) refreshSpinner.classList.add(\"fa-spin\");\n\n      try {\n        const response = await fetch(`${GAS_WEB_APP_URL}?action=getInitialData`);\n        const result = await response.json();\n\n        if (result.status === \"success\") {\n          state.pegawai = result.pegawai || [];\n          state.respon = result.respon || [];\n\n          renderStats();\n          renderTable(state.respon);\n          populatePegawaiDropdown();\n          renderPegawaiGrid();\n        }\n      } catch (err) {\n        console.error(\"Gagal tarik data:\", err);\n      } finally {\n        if (isRefresh && refreshSpinner) refreshSpinner.classList.remove(\"fa-spin\");\n      }\n    }\n\n    function renderStats() {\n      document.getElementById(\"statTotalOpr\").innerText = state.respon.length;\n      document.getElementById(\"statTotalPegawai\").innerText = state.pegawai.length;\n      \n      const thisMonth = new Date().getMonth();\n      const countMonth = state.respon.filter(r => r.timestamp && new Date(r.timestamp).getMonth() === thisMonth).length;\n      document.getElementById(\"statMonthOpr\").innerText = countMonth;\n    }\n\n    function renderTable(data) {\n      const tbody = document.getElementById(\"oprTableBody\");\n      if (data.length === 0) {\n        tbody.innerHTML = `\u003ctr>\u003ctd colspan=\"5\" class=\"py-8 text-center text-slate-400\">Tiada laporan OPR direkodkan lagi.\u003c/td>\u003c/tr>`;\n        return;\n      }\n\n      tbody.innerHTML = data.map(r => `\n        \u003ctr class=\"hover:bg-slate-50 transition border-b border-slate-200\">\n          \u003ctd class=\"py-3 px-4 font-mono text-[11px] text-slate-500\">${r.timestamp || '-'}\u003c/td>\n          \u003ctd class=\"py-3 px-4 font-bold text-slate-900\">${r.tajukProgram}\u003c/td>\n          \u003ctd class=\"py-3 px-4 text-slate-600\">${r.tarikhPelaksanaan}\u003c/td>\n          \u003ctd class=\"py-3 px-4 text-slate-700\">${r.namaPegawai}\u003c/td>\n          \u003ctd class=\"py-3 px-4 text-center\">\n            \u003cbutton onclick='loadOprForEdit(${JSON.stringify(r).replace(/'/g, \"&apos;\")})' class=\"px-3 py-1 bg-slate-900 text-white hover:bg-slate-800 rounded-lg font-bold text-[11px] transition space-x-1 shadow-sm\">\n              \u003ci class=\"fa-solid fa-pen-to-square\">\u003c/i>\n              \u003cspan>Edit & Cetak\u003c/span>\n            \u003c/button>\n          \u003c/td>\n        \u003c/tr>\n      `).join(\"\");\n    }\n\n    function filterTable() {\n      const q = document.getElementById(\"searchInput\").value.toLowerCase();\n      const filtered = state.respon.filter(r => \n        r.tajukProgram.toLowerCase().includes(q) || \n        r.namaPegawai.toLowerCase().includes(q)\n      );\n      renderTable(filtered);\n    }\n\n    function populatePegawaiDropdown() {\n      const field = document.getElementById(\"namaPegawai\");\n      if (field) field.value = field.value || \"\";\n      hidePegawaiSuggestions();\n    }\n\n    function hidePegawaiSuggestions() {\n      const list = document.getElementById(\"pegawaiSuggestions\");\n      if (list) {\n        list.innerHTML = \"\";\n        list.classList.add(\"hidden\");\n      }\n    }\n\n    function filterPegawaiSuggestions() {\n      const field = document.getElementById(\"namaPegawai\");\n      const list = document.getElementById(\"pegawaiSuggestions\");\n      if (!field || !list) return;\n      const query = field.value.trim().toLocaleLowerCase(\"ms-MY\");\n      autoFillJawatan();\n      if (!query) return hidePegawaiSuggestions();\n      const matches = state.pegawai\n        .filter(person => person.nama.toLocaleLowerCase(\"ms-MY\").includes(query))\n        .slice(0, 8);\n      list.innerHTML = \"\";\n      if (!matches.length) return hidePegawaiSuggestions();\n      matches.forEach(person => {\n        const button = document.createElement(\"button\");\n        button.type = \"button\";\n        button.className = \"w-full px-3 py-2 text-left hover:bg-slate-50 border-b last:border-b-0 border-slate-100 transition\";\n        const name = document.createElement(\"span\");\n        name.className = \"block text-xs font-bold text-slate-800\";\n        name.textContent = person.nama;\n        const position = document.createElement(\"span\");\n        position.className = \"block text-[10px] text-slate-500 mt-0.5\";\n        position.textContent = person.jawatan || \"\";\n        button.append(name, position);\n        button.addEventListener(\"mousedown\", event => {\n          event.preventDefault();\n          selectPegawai(person.nama);\n        });\n        list.appendChild(button);\n      });\n      list.classList.remove(\"hidden\");\n    }\n\n    function selectPegawai(name) {\n      document.getElementById(\"namaPegawai\").value = name;\n      autoFillJawatan();\n      hidePegawaiSuggestions();\n    }\n\n    function autoFillJawatan() {\n      const selectedName = document.getElementById(\"namaPegawai\").value.trim();\n      const found = state.pegawai.find(p => p.nama === selectedName);\n      if (found) {\n        document.getElementById(\"jawatanPegawai\").value = found.jawatan;\n      }\n      updatePreview();\n    }\n\n    document.addEventListener(\"click\", event => {\n      if (!event.target.closest(\"#namaPegawai\") && !event.target.closest(\"#pegawaiSuggestions\")) hidePegawaiSuggestions();\n    });\n\n    function compressImage(file, maxWidth = 1000, quality = 0.7) {\n      return new Promise((resolve) => {\n        const reader = new FileReader();\n        reader.readAsDataURL(file);\n        reader.onload = (event) => {\n          const img = new Image();\n          img.src = event.target.result;\n          img.onload = () => {\n            const canvas = document.createElement('canvas');\n            let width = img.width;\n            let height = img.height;\n            if (width > maxWidth) {\n              height = Math.round((height * maxWidth) / width);\n              width = maxWidth;\n            }\n            canvas.width = width;\n            canvas.height = height;\n            const ctx = canvas.getContext('2d');\n            ctx.drawImage(img, 0, 0, width, height);\n            resolve(canvas.toDataURL('image/jpeg', quality));\n          };\n        };\n      });\n    }\n\n    async function processAndUploadImage(e, index) {\n      const file = e.target.files[0];\n      if (file) {\n        const compressedBase64 = await compressImage(file);\n        state.images[index] = compressedBase64;\n        updatePreview();\n      }\n    }\n\n    function updatePreview() {\n      document.getElementById(\"prevTajuk\").innerText = document.getElementById(\"tajukProgram\").value || \"\";\n      document.getElementById(\"prevTarikh\").innerText = document.getElementById(\"tarikhPelaksanaan\").value || \"\";\n      document.getElementById(\"prevMasa\").innerText = document.getElementById(\"masa\").value || \"\";\n      document.getElementById(\"prevSasaran\").innerText = document.getElementById(\"sasaran\").value || \"\";\n      \n      const pelibatanVal = document.getElementById(\"pelibatan\").value;\n      if (pelibatanVal) {\n        document.getElementById(\"prevPelibatan\").innerText = pelibatanVal;\n        document.getElementById(\"prevPelibatanBox\").classList.remove(\"hidden\");\n      } else {\n        document.getElementById(\"prevPelibatanBox\").classList.add(\"hidden\");\n      }\n\n      document.getElementById(\"prevObjektif\").innerText = document.getElementById(\"objektif\").value || \"\";\n      document.getElementById(\"prevKekuatan\").innerText = document.getElementById(\"kekuatan\").value || \"\";\n      document.getElementById(\"prevPenambahbaikan\").innerText = document.getElementById(\"penambahbaikan\").value || \"\";\n      document.getElementById(\"prevNama\").innerText = document.getElementById(\"namaPegawai\").value || \"\";\n      document.getElementById(\"prevJawatan\").innerText = document.getElementById(\"jawatanPegawai\").value || \"\";\n      document.getElementById(\"prevTarikhLaporan\").innerText = document.getElementById(\"tarikhLaporan\").value || \"\";\n\n      // Kemaskini Pratonton Gambar 1 (Hero)\n      const img1El = document.getElementById(\"prevImg1\");\n      if (state.images[1]) {\n        img1El.src = state.images[1];\n        img1El.classList.remove(\"hidden\");\n      } else {\n        img1El.src = \"\";\n        img1El.classList.add(\"hidden\");\n      }\n\n      // Kemaskini Pratonton Gambar 2, 3, 4\n      let hasGallery = false;\n      for (let i = 2; i \u003c= 4; i++) {\n        const boxEl = document.getElementById(`boxImg${i}`);\n        const imgEl = document.getElementById(`prevImg${i}`);\n        const capVal = document.getElementById(`kapsyen${i}`).value;\n        const capEl = document.getElementById(`prevCap${i}`);\n\n        if (capEl) capEl.innerText = capVal || `Gambar ${i}`;\n\n        if (state.images[i]) {\n          if (imgEl) imgEl.src = state.images[i];\n          if (boxEl) boxEl.classList.remove(\"hidden\");\n          hasGallery = true;\n        } else {\n          if (imgEl) imgEl.src = \"\";\n          if (boxEl) boxEl.classList.add(\"hidden\");\n        }\n      }\n\n      if (hasGallery) {\n        document.getElementById(\"prevGalleryBox\").classList.remove(\"hidden\");\n      } else {\n        document.getElementById(\"prevGalleryBox\").classList.add(\"hidden\");\n      }\n    }\n\n    function clearField(fieldId) {\n      document.getElementById(fieldId).value = \"\";\n      updatePreview();\n    }\n\n    function structuredPrefix(type) {\n      return type === \"objektif\" ? \"1. \" : \"● \";\n    }\n\n    function handleStructuredInput(field, type) {\n      // Melindungi input tampal atau teks yang ditaip selepas medan dikosongkan.\n      if (field.value && !field.value.trimStart().match(type === \"objektif\" ? /^\\d+\\.\\s*/ : /^[●•\\-*]\\s*/)) {\n        const cursor = field.selectionStart;\n        const prefix = structuredPrefix(type);\n        field.value = prefix + field.value.trimStart();\n        field.setSelectionRange(cursor + prefix.length, cursor + prefix.length);\n      }\n      updatePreview();\n    }\n\n    function handleStructuredEnter(event, type) {\n      const field = event.target;\n      // Letakkan penanda sebelum aksara pertama ditaip, bukan selepas Enter.\n      if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey && !event.isComposing && !field.value.trim()) {\n        const prefix = structuredPrefix(type);\n        field.value = prefix;\n        field.setSelectionRange(prefix.length, prefix.length);\n      }\n\n      if (event.key !== \"Enter\" || event.shiftKey || event.isComposing) return;\n      event.preventDefault();\n      const start = field.selectionStart;\n      const currentLine = field.value.slice(0, start).split(\"\\n\").pop();\n      let nextPrefix;\n\n      if (type === \"objektif\") {\n        const numbered = currentLine.match(/^(\\s*)(\\d+)\\.\\s*/);\n        nextPrefix = numbered ? `${numbered[1]}${Number(numbered[2]) + 1}. ` : \"1. \";\n      } else {\n        const bulleted = currentLine.match(/^(\\s*)[●•\\-*]\\s*/);\n        nextPrefix = bulleted ? `${bulleted[1]}● ` : \"● \";\n      }\n\n      field.setRangeText(`\\n${nextPrefix}`, start, field.selectionEnd, \"end\");\n      updatePreview();\n    }\n\n    function resetOprForm() {\n      if (confirm(\"Adakah anda pasti untuk mengosongkan borang?\")) {\n        document.getElementById(\"oprForm\").reset();\n        document.getElementById(\"editRowId\").value = \"\";\n        state.images = { 1: null, 2: null, 3: null, 4: null };\n        \n        for (let i = 1; i \u003c= 4; i++) {\n          const fEl = document.getElementById(`fileImg${i}`);\n          if (fEl) fEl.value = \"\";\n        }\n\n        const today = new Date().toISOString().split('T')[0];\n        document.getElementById(\"tarikhLaporan\").value = today;\n        document.getElementById(\"submitBtnText\").innerText = \"Cetak / Simpan Sebagai PDF & Hantar Data\";\n        updatePreview();\n      }\n    }\n\n    const suggestionStocks = {\n      objektif: [\n        \"Meningkatkan kefahaman {sasaran} berkaitan pengisian dan pelaksanaan {tajuk}.\",\n        \"Memperkukuh pengetahuan serta kemahiran {sasaran} melalui pendedahan yang terancang.\",\n        \"Menyediakan ruang pembelajaran aktif untuk {sasaran} berkongsi pengalaman dan amalan terbaik.\",\n        \"Meningkatkan keupayaan {sasaran} mengaplikasikan input program dalam tugas dan tindakan susulan.\",\n        \"Menyelaras hala tuju pelaksanaan antara {sasaran} agar selari dengan keperluan semasa.\",\n        \"Membina keyakinan {sasaran} untuk melaksanakan inisiatif yang diperoleh secara lebih berkesan.\",\n        \"Memantapkan kompetensi profesional {sasaran} menerusi perkongsian input yang relevan.\",\n        \"Menggalakkan budaya pembelajaran berterusan dalam kalangan {sasaran}.\",\n        \"Memperluas jaringan kerjasama dan perkongsian idea dalam kalangan {sasaran}.\",\n        \"Memberi pendedahan kepada {sasaran} terhadap pendekatan, strategi dan amalan semasa.\",\n        \"Meningkatkan kesedaran {sasaran} terhadap peranan masing-masing dalam menjayakan program.\",\n        \"Memudah cara {sasaran} mengenal pasti langkah praktikal yang boleh dilaksanakan selepas program.\",\n        \"Memperkasa {sasaran} untuk membuat perancangan dan keputusan yang lebih berfokus.\",\n        \"Mewujudkan kefahaman bersama dalam kalangan {sasaran} terhadap matlamat {tajuk}.\",\n        \"Mengukuhkan penguasaan {sasaran} terhadap kaedah pelaksanaan yang sistematik dan berimpak.\",\n        \"Merangsang idea baharu serta inovasi dalam kalangan {sasaran} melalui sesi interaktif.\",\n        \"Meningkatkan kesediaan {sasaran} untuk menghadapi cabaran pelaksanaan di peringkat masing-masing.\",\n        \"Membudayakan amalan refleksi dan penambahbaikan berterusan dalam kalangan {sasaran}.\",\n        \"Memastikan {sasaran} mendapat maklumat yang tepat, jelas dan boleh dilaksanakan.\",\n        \"Menggalakkan kolaborasi yang lebih erat antara {sasaran} dan pihak berkaitan.\"\n      ],\n      kekuatan: [\n        \"Komitmen dan penglibatan aktif {sasaran} sepanjang pelaksanaan program.\",\n        \"Pengisian program yang jelas, tersusun dan menepati keperluan {sasaran}.\",\n        \"Kerjasama baik antara urus setia, penceramah dan peserta telah melancarkan perjalanan program.\",\n        \"Penyampaian yang interaktif berjaya menarik perhatian serta menggalakkan penglibatan peserta.\",\n        \"Pengurusan masa program berjalan dengan teratur mengikut tentatif yang ditetapkan.\",\n        \"Maklum balas peserta menunjukkan penerimaan yang baik terhadap pengisian program.\",\n        \"Penceramah berjaya menyampaikan input secara berfokus, jelas dan mudah difahami.\",\n        \"Bahan pembentangan dan aktiviti yang disediakan menyokong pemahaman peserta dengan baik.\",\n        \"Suasana pembelajaran yang positif mendorong peserta untuk bertanya dan berkongsi pandangan.\",\n        \"Penglibatan pihak berkaitan membantu memperkukuh kelancaran pelaksanaan program.\",\n        \"Sesi perkongsian pengalaman memberi nilai tambah kepada {sasaran}.\",\n        \"Aktiviti yang dilaksanakan bersesuaian dengan objektif dan hasil yang disasarkan.\",\n        \"Urus setia memberi respons yang cekap terhadap keperluan peserta sepanjang program.\",\n        \"Penggunaan kaedah pelaksanaan yang pelbagai menjadikan program lebih menarik dan berkesan.\",\n        \"Peserta menunjukkan kesediaan untuk mengaplikasikan input yang diperoleh dalam tugas masing-masing.\",\n        \"Komunikasi yang baik antara semua pihak membantu mengelakkan sebarang gangguan pelaksanaan.\",\n        \"Sokongan pengurusan dan pihak kerjasama menyumbang kepada kejayaan program.\",\n        \"Dokumentasi serta penyelarasan awal yang baik memudahkan urusan pelaksanaan.\",\n        \"Sesi soal jawab memberi peluang kepada peserta mendapatkan penjelasan secara langsung.\",\n        \"Objektif program dapat disampaikan dengan jelas melalui pengisian yang relevan dan praktikal.\"\n      ],\n      penambahbaikan: [\n        \"Memanjangkan tempoh sesi praktikal supaya peserta mempunyai lebih ruang untuk mengaplikasikan input.\",\n        \"Menyediakan bahan rujukan awal agar peserta dapat membuat persediaan sebelum program berlangsung.\",\n        \"Memperbanyak aktiviti kumpulan bagi menggalakkan penglibatan dan perkongsian idea peserta.\",\n        \"Menyediakan sesi susulan untuk memantau pelaksanaan input program di peringkat masing-masing.\",\n        \"Menambah masa bagi sesi soal jawab untuk membolehkan isu peserta ditangani dengan lebih menyeluruh.\",\n        \"Memperluas hebahan awal supaya penyertaan daripada kumpulan sasaran dapat ditingkatkan.\",\n        \"Menyediakan contoh amalan terbaik yang lebih pelbagai dan dekat dengan situasi sebenar peserta.\",\n        \"Menggunakan borang maklum balas yang lebih terperinci untuk menilai keberkesanan program.\",\n        \"Memastikan bahan pembentangan dikongsi selepas program sebagai rujukan peserta.\",\n        \"Memperkemas pengurusan masa setiap slot agar semua pengisian dapat disampaikan dengan optimum.\",\n        \"Menyusun aktiviti mengikut tahap keperluan peserta supaya pengisian lebih bersasar.\",\n        \"Mewujudkan kumpulan sokongan atau saluran komunikasi bagi tindakan susulan selepas program.\",\n        \"Menambah elemen demonstrasi dan latihan amali untuk mengukuhkan kefahaman peserta.\",\n        \"Mendapatkan keperluan awal peserta melalui tinjauan ringkas sebelum menetapkan pengisian.\",\n        \"Memperluas penglibatan rakan strategik bagi menambah nilai kepada pelaksanaan program.\",\n        \"Menyediakan panduan tindakan ringkas supaya peserta dapat melaksanakan susulan dengan lebih yakin.\",\n        \"Mengadakan sesi perkongsian susulan bagi menilai cabaran dan kejayaan pelaksanaan.\",\n        \"Memastikan kemudahan teknikal diuji lebih awal untuk mengelakkan gangguan semasa program.\",\n        \"Menambah variasi kaedah penyampaian bagi mengekalkan fokus dan minat peserta.\",\n        \"Merekod dapatan dan cadangan peserta untuk penambahbaikan penganjuran pada masa hadapan.\"\n      ]\n    };\n\n    function normaliseSuggestionText(value, fallback) {\n      const text = String(value || \"\").trim().replace(/\\s+/g, \" \");\n      return (text || fallback).toLocaleLowerCase(\"ms-MY\");\n    }\n\n    function pickSuggestions(fieldType, tajuk, sasaran) {\n      const stock = suggestionStocks[fieldType] || [];\n      const selected = [...stock].sort(() => Math.random() - 0.5).slice(0, 3);\n      const target = normaliseSuggestionText(sasaran, \"peserta\");\n      const program = normaliseSuggestionText(tajuk, \"program ini\");\n      return selected.map((text, index) => {\n        const sentence = text.replaceAll(\"{tajuk}\", program).replaceAll(\"{sasaran}\", target);\n        return fieldType === \"objektif\" ? `${index + 1}. ${sentence}` : `● ${sentence}`;\n      }).join(\"\\n\");\n    }\n\n    function getAISuggestion(fieldType) {\n      const tajuk = document.getElementById(\"tajukProgram\").value;\n      const sasaran = document.getElementById(\"sasaran\").value;\n\n      if (!tajuk) {\n        alert(\"Sila isi 'Tajuk Program' terlebih dahulu.\");\n        document.getElementById(\"tajukProgram\").focus();\n        return;\n      }\n\n      const targetField = document.getElementById(fieldType);\n      targetField.value = pickSuggestions(fieldType, tajuk, sasaran);\n      updatePreview();\n    }\n\n    function triggerPrint() {\n      window.print();\n    }\n\n    async function handleSaveAndPrint(e) {\n      e.preventDefault();\n      \n      triggerPrint();\n\n      const submitBtn = document.getElementById(\"submitBtn\");\n      submitBtn.disabled = true;\n      submitBtn.innerHTML = `\u003ci class=\"fa-solid fa-spinner fa-spin\">\u003c/i> \u003cspan>Menyimpan Rekod...\u003c/span>`;\n\n      const payload = {\n        editRowId: document.getElementById(\"editRowId\").value || \"\",\n        namaPegawai: document.getElementById(\"namaPegawai\").value,\n        jawatanPegawai: document.getElementById(\"jawatanPegawai\").value,\n        tarikhLaporan: document.getElementById(\"tarikhLaporan\").value,\n        tajukProgram: document.getElementById(\"tajukProgram\").value,\n        tarikhPelaksanaan: document.getElementById(\"tarikhPelaksanaan\").value,\n        masa: document.getElementById(\"masa\").value,\n        sasaran: document.getElementById(\"sasaran\").value,\n        pelibatan: document.getElementById(\"pelibatan\").value,\n        objektif: document.getElementById(\"objektif\").value,\n        kekuatan: document.getElementById(\"kekuatan\").value,\n        penambahbaikan: document.getElementById(\"penambahbaikan\").value,\n        gambar1: state.images[1] || \"\",\n        gambar2: state.images[2] || \"\",\n        kapsyen2: document.getElementById(\"kapsyen2\").value,\n        gambar3: state.images[3] || \"\",\n        kapsyen3: document.getElementById(\"kapsyen3\").value,\n        gambar4: state.images[4] || \"\",\n        kapsyen4: document.getElementById(\"kapsyen4\").value\n      };\n\n      try {\n        const res = await fetch(GAS_WEB_APP_URL, {\n          method: \"POST\",\n          body: JSON.stringify(payload)\n        });\n        const result = await res.json();\n\n        if (result.status === \"success\") {\n          alert(\"Rekod OPR berjaya dikemaskini dalam sistem!\");\n          await loadData(true);\n        } else {\n          alert(\"Ralat simpan data: \" + result.message);\n        }\n      } catch (err) {\n        console.error(\"Ralat simpan:\", err);\n      } finally {\n        submitBtn.disabled = false;\n        submitBtn.innerHTML = `\u003ci class=\"fa-solid fa-print\">\u003c/i> \u003cspan id=\"submitBtnText\">Cetak / Simpan Sebagai PDF & Hantar Data\u003c/span>`;\n      }\n    }\n\n    function loadOprForEdit(data) {\n      switchTab('form');\n\n      document.getElementById(\"editRowId\").value = data.id || \"\";\n      document.getElementById(\"namaPegawai\").value = data.namaPegawai || \"\";\n      document.getElementById(\"jawatanPegawai\").value = data.jawatanPegawai || \"\";\n      document.getElementById(\"tarikhLaporan\").value = formatDateForInput(data.tarikhLaporan);\n      document.getElementById(\"tajukProgram\").value = data.tajukProgram || \"\";\n      document.getElementById(\"tarikhPelaksanaan\").value = data.tarikhPelaksanaan || \"\";\n      document.getElementById(\"masa\").value = data.masa || \"\";\n      document.getElementById(\"sasaran\").value = data.sasaran || \"\";\n      document.getElementById(\"pelibatan\").value = data.pelibatan || \"\";\n      document.getElementById(\"objektif\").value = data.objektif || \"\";\n      document.getElementById(\"kekuatan\").value = data.kekuatan || \"\";\n      document.getElementById(\"penambahbaikan\").value = data.penambahbaikan || \"\";\n\n      document.getElementById(\"kapsyen2\").value = data.kapsyen2 || \"\";\n      document.getElementById(\"kapsyen3\").value = data.kapsyen3 || \"\";\n      document.getElementById(\"kapsyen4\").value = data.kapsyen4 || \"\";\n\n      for (let i = 1; i \u003c= 4; i++) {\n        const fEl = document.getElementById(`fileImg${i}`);\n        if (fEl) fEl.value = \"\";\n      }\n\n      state.images = {\n        1: data.gambar1 || null,\n        2: data.gambar2 || null,\n        3: data.gambar3 || null,\n        4: data.gambar4 || null\n      };\n\n      document.getElementById(\"submitBtnText\").innerText = \"Kemaskini Rekod & Cetak PDF\";\n      closeModal();\n      updatePreview();\n    }\n\n    function renderPegawaiGrid() {\n      const grid = document.getElementById(\"pegawaiGrid\");\n      if (state.pegawai.length === 0) {\n        grid.innerHTML = `\u003cp class=\"col-span-3 text-slate-400 text-xs\">Tiada data pegawai.\u003c/p>`;\n        return;\n      }\n\n      grid.innerHTML = state.pegawai.map(p => {\n        const oprs = state.respon.filter(r => r.namaPegawai === p.nama);\n        const jawatanRingkas = String(p.jawatan || \"\").trim().toUpperCase() === \"SCHOOL IMPROVEMENT SPECIALIST COACH\" ? \"SISC+\" : p.jawatan;\n        return `\n          \u003cdiv onclick=\"openHistoryModal('${p.nama}')\" class=\"p-5 min-h-[158px] bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow transition cursor-pointer flex items-start space-x-4\">\n            \u003cdiv class=\"w-12 h-12 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-lg\">\n              ${p.nama.charAt(0)}\n            \u003c/div>\n            \u003cdiv class=\"flex-1 min-w-0\">\n              \u003ch4 class=\"font-bold text-slate-900 text-sm truncate\">${p.nama}\u003c/h4>\n              \u003cp class=\"officer-job-title text-xs text-slate-500 leading-snug min-h-[2.5rem]\">${jawatanRingkas || \"\"}\u003c/p>\n              \u003cdiv class=\"mt-3 flex items-center justify-between text-xs\">\n                \u003cspan class=\"font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg\">${oprs.length} OPR Dihantar\u003c/span>\n                \u003cspan class=\"text-slate-500 font-bold\">Lihat \u003ci class=\"fa-solid fa-chevron-right text-[10px]\">\u003c/i>\u003c/span>\n              \u003c/div>\n            \u003c/div>\n          \u003c/div>\n        `;\n      }).join(\"\");\n    }\n\n    function openHistoryModal(namaPegawai) {\n      const p = state.pegawai.find(x => x.nama === namaPegawai);\n      const oprs = state.respon.filter(r => r.namaPegawai === namaPegawai);\n\n      document.getElementById(\"modalPegawaiName\").innerText = namaPegawai;\n      document.getElementById(\"modalPegawaiJawatan\").innerText = p ? p.jawatan : \"\";\n\n      const modalList = document.getElementById(\"modalOprList\");\n      if (oprs.length === 0) {\n        modalList.innerHTML = `\u003cp class=\"text-center text-slate-400 py-8 text-xs\">Pegawai ini belum pernah menghantar OPR.\u003c/p>`;\n      } else {\n        modalList.innerHTML = oprs.map(r => `\n          \u003cdiv class=\"p-4 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between\">\n            \u003cdiv>\n              \u003ch5 class=\"font-bold text-slate-900 text-xs\">${r.tajukProgram}\u003c/h5>\n              \u003cp class=\"text-[11px] text-slate-500 mt-0.5\">\u003ci class=\"fa-regular fa-calendar\">\u003c/i> ${r.tarikhPelaksanaan} | ${r.masa}\u003c/p>\n            \u003c/div>\n            \u003cbutton onclick='loadOprForEdit(${JSON.stringify(r).replace(/'/g, \"&apos;\")})' class=\"px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition flex items-center space-x-1\">\n              \u003ci class=\"fa-solid fa-pen-to-square\">\u003c/i>\n              \u003cspan>Edit / Cetak\u003c/span>\n            \u003c/button>\n          \u003c/div>\n        `).join(\"\");\n      }\n\n      document.getElementById(\"historyModal\").classList.remove(\"hidden\");\n    }\n\n    function closeModal() {\n      document.getElementById(\"historyModal\").classList.add(\"hidden\");\n    }\n  \u003c/script>\n  \u003cscript src=\"app-v15.js?v=20\">\u003c/script>\n\u003c/body>\n\u003c/html>\n");
-    document.close();
-  };
-  const remaining = deadline - Date.now();
-  if (remaining <= 0) reopen();
-  else window.setTimeout(reopen, remaining);
-})();
-</script>
+<body class="h-full flex flex-col text-slate-800">
+
+  <!-- TOP APP BAR -->
+  <header class="bg-slate-900 text-white shadow-md sticky top-0 z-50 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col gap-3 py-3 sm:h-20 sm:flex-row sm:items-center sm:justify-between sm:gap-0 sm:py-0">
+        
+        <div class="flex items-center space-x-3 sm:space-x-4">
+          <img src="https://i.ibb.co/fYY58Rh2/JATA-NEGARA-PNG.png" alt="Jata Negara Malaysia" class="h-10 w-auto object-contain sm:h-12">
+          <div>
+            <h1 class="text-sm sm:text-xl font-extrabold tracking-tight text-white">OPR Dashboard Sektor Pembelajaran</h1>
+            <p class="text-xs text-slate-400 font-medium">PPD Petaling Utama</p>
+          </div>
+        </div>
+
+        <nav class="flex w-full space-x-1 rounded-xl border border-slate-700 bg-slate-800/80 p-1 sm:w-auto sm:space-x-2 sm:p-1.5">
+          <button onclick="switchTab('dashboard')" id="tab-dashboard" class="flex-1 whitespace-nowrap px-2 py-2 text-xs font-semibold rounded-lg transition-all duration-200 bg-slate-100 text-slate-900 shadow sm:flex-none sm:px-4 sm:text-sm">
+            <i class="fa-solid fa-chart-pie mr-2"></i>Dashboard
+          </button>
+          <button onclick="switchTab('form')" id="tab-form" class="flex-1 whitespace-nowrap px-2 py-2 text-xs font-semibold rounded-lg transition-all duration-200 text-slate-300 hover:text-white sm:flex-none sm:px-4 sm:text-sm">
+            <i class="fa-solid fa-pen-to-square mr-2"></i>Borang OPR
+          </button>
+          <button onclick="switchTab('pegawai')" id="tab-pegawai" class="flex-1 whitespace-nowrap px-2 py-2 text-xs font-semibold rounded-lg transition-all duration-200 text-slate-300 hover:text-white sm:flex-none sm:px-4 sm:text-sm">
+            <i class="fa-solid fa-box-archive mr-2"></i>Arkib OPR
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 sm:pb-24 custom-scrollbar">
+
+    <!-- ==================== TAB 1: DASHBOARD DATA ==================== -->
+    <section id="sec-dashboard" class="space-y-6 no-print">
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="glass-card p-5 rounded-2xl shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Jumlah OPR Dihantar</p>
+            <h3 id="statTotalOpr" class="text-3xl font-extrabold text-slate-900 mt-1">0</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 text-xl">
+            <i class="fa-solid fa-file-lines"></i>
+          </div>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Pegawai Berdaftar</p>
+            <h3 id="statTotalPegawai" class="text-3xl font-extrabold text-slate-900 mt-1">0</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 text-xl">
+            <i class="fa-solid fa-user-check"></i>
+          </div>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Laporan Bulan Ini</p>
+            <h3 id="statMonthOpr" class="text-3xl font-extrabold text-slate-900 mt-1">0</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 text-xl">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50">
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Senarai Laporan OPR Rekod</h2>
+            <p class="text-xs text-slate-500">Klik rekod untuk paparan semula, sunting atau cetak PDF.</p>
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <div class="relative">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+              <input type="text" id="searchInput" oninput="scheduleReportSearch()" placeholder="Cari program atau pegawai..." class="pl-9 pr-4 py-2 bg-white border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-slate-500 outline-none w-64">
+            </div>
+
+            <button onclick="loadData(true)" class="px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-700 hover:bg-slate-100 text-xs font-semibold flex items-center space-x-1.5 transition">
+              <i id="refreshSpinner" class="fa-solid fa-rotate"></i>
+              <span>Refresh</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-100 border-b border-slate-200 text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+                <th class="py-3 px-4">Tarikh & Masa</th>
+                <th class="py-3 px-4">Tajuk Program</th>
+                <th class="py-3 px-4">Tarikh Pelaksanaan</th>
+                <th class="py-3 px-4">Pegawai Pelapor</th>
+                <th class="py-3 px-4 text-center">Tindakan</th>
+              </tr>
+            </thead>
+            <tbody id="oprTableBody" class="divide-y divide-slate-200 text-xs">
+              <tr>
+                <td colspan="5" class="py-12 text-center text-slate-400">
+                  <i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-slate-600"></i>
+                  <p>Memuatkan data laporan...</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: OPR BARU (FORM & PREVIEW) ==================== -->
+    <section id="sec-form" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- BORANG INPUT (NO PRINT) -->
+        <div class="lg:col-span-6 glass-card p-6 rounded-2xl shadow-sm space-y-5 no-print">
+          <div class="border-b border-slate-200 pb-4 flex items-center justify-between">
+            <div>
+              <h2 class="text-lg font-bold text-slate-900">Borang Laporan OPR</h2>
+              <p class="text-xs text-slate-500">Isi borang di bawah. Pratonton di sebelah kanan dikemaskini secara langsung.</p>
+            </div>
+            
+            <button type="button" onclick="resetOprForm()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-300 transition flex items-center space-x-1">
+              <i class="fa-solid fa-rotate-left"></i>
+              <span>Reset</span>
+            </button>
+          </div>
+
+          <form id="oprForm" onsubmit="handleSaveAndPrint(event)" class="space-y-4">
+            
+            <input type="hidden" id="editRowId" value="">
+
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+              <h3 class="text-xs font-bold uppercase text-slate-700">Maklumat Pelapor</h3>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="relative">
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Pegawai *</label>
+                  <input type="text" id="namaPegawai" oninput="filterPegawaiSuggestions()" onfocus="filterPegawaiSuggestions()" autocomplete="off" required placeholder="Taip nama pegawai..." class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-slate-500 outline-none">
+                  <div id="pegawaiSuggestions" class="hidden absolute z-30 left-0 right-0 mt-1 max-h-52 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl custom-scrollbar"></div>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Jawatan *</label>
+                  <input type="text" id="jawatanPegawai" oninput="updatePreview()" required placeholder="Jawatan" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Tarikh Laporan Disediakan *</label>
+                <input type="date" id="tarikhLaporan" onchange="updatePreview()" required class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none">
+              </div>
+
+            </div>
+
+            <div class="space-y-3">
+              <h3 class="text-xs font-bold uppercase text-slate-700">Butiran Program</h3>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">Tajuk Program / Aktiviti *</label>
+                <input type="text" id="tajukProgram" oninput="updatePreview()" required placeholder="Cth: BENGKEL AI STEM UNTUK GKMP" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none">
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Tarikh Pelaksanaan *</label>
+                  <input type="text" id="tarikhPelaksanaan" oninput="updatePreview()" required placeholder="Cth: 11 OGOS 2026" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Masa Pelaksanaan *</label>
+                  <input type="text" id="masa" oninput="updatePreview()" required placeholder="Cth: 8.00 PAGI - 5.00 PETANG" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none">
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Kumpulan Sasaran *</label>
+                  <input type="text" id="sasaran" oninput="updatePreview()" required placeholder="Cth: 70 GURU STEM" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Penglibatan Pihak Luar / Kerjasama</label>
+                  <input type="text" id="pelibatan" oninput="updatePreview()" placeholder="Cth: GOOGLE DAN APPLE" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs outline-none">
+                </div>
+              </div>
+            </div>
+
+            <!-- OBJEKTIF, KEKUATAN & PENAMBAHBAIKAN -->
+            <div class="space-y-3">
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="text-xs font-semibold text-slate-700">Objektif Program *</label>
+                  <button type="button" onclick="getAISuggestion('objektif')" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded border border-slate-300" title="Jana cadangan baharu">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Cadangan
+                  </button>
+                </div>
+                <div class="relative">
+                  <textarea id="objektif" oninput="handleStructuredInput(this, 'objektif')" onkeydown="handleStructuredEnter(event, 'objektif')" rows="3" required placeholder="1. ...&#10;2. ..." class="w-full bg-white border border-slate-300 rounded-xl p-2.5 pr-8 text-xs outline-none"></textarea>
+                  <button type="button" onclick="clearField('objektif')" class="absolute top-2 right-2 text-slate-400 hover:text-slate-700 w-5 h-5 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="text-xs font-semibold text-slate-700">Kekuatan Program *</label>
+                  <button type="button" onclick="getAISuggestion('kekuatan')" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded border border-slate-300" title="Jana cadangan baharu">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Cadangan
+                  </button>
+                </div>
+                <div class="relative">
+                  <textarea id="kekuatan" oninput="handleStructuredInput(this, 'bullet')" onkeydown="handleStructuredEnter(event, 'bullet')" rows="3" required placeholder="● ..." class="w-full bg-white border border-slate-300 rounded-xl p-2.5 pr-8 text-xs outline-none"></textarea>
+                  <button type="button" onclick="clearField('kekuatan')" class="absolute top-2 right-2 text-slate-400 hover:text-slate-700 w-5 h-5 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="text-xs font-semibold text-slate-700">Penambahbaikan & Cadangan *</label>
+                  <button type="button" onclick="getAISuggestion('penambahbaikan')" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded border border-slate-300" title="Jana cadangan baharu">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Cadangan
+                  </button>
+                </div>
+                <div class="relative">
+                  <textarea id="penambahbaikan" oninput="handleStructuredInput(this, 'bullet')" onkeydown="handleStructuredEnter(event, 'bullet')" rows="3" required placeholder="● ..." class="w-full bg-white border border-slate-300 rounded-xl p-2.5 pr-8 text-xs outline-none"></textarea>
+                  <button type="button" onclick="clearField('penambahbaikan')" class="absolute top-2 right-2 text-slate-400 hover:text-slate-700 w-5 h-5 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- GAMBAR & KAPSYEN -->
+            <div class="space-y-3">
+              <h3 class="text-xs font-bold uppercase text-slate-700">Lampiran Gambar</h3>
+              <p class="text-[11px] text-slate-500 italic">Disyorkan gambar format melintang (landscape).</p>
+
+              <div class="p-3 border border-slate-300 rounded-xl bg-slate-50 space-y-2">
+                <span class="text-xs font-bold text-slate-800 block">Gambar 1 (Hero Utama)</span>
+                <input type="file" id="fileImg1" accept="image/*" onchange="processAndUploadImage(event, 1)" class="text-xs text-slate-600">
+                <button type="button" id="editImgBtn1" onclick="openImageEditor(1)" class="hidden px-2.5 py-1.5 bg-white border border-slate-300 rounded-lg text-[11px] font-bold text-slate-700 hover:bg-slate-100"><i class="fa-solid fa-arrows-up-down-left-right mr-1"></i>Reposition</button>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                <div class="p-2.5 border border-slate-300 rounded-xl bg-slate-50 space-y-1.5">
+                  <span class="text-[11px] font-bold text-slate-700 block">Gambar 2</span>
+                  <input type="file" id="fileImg2" accept="image/*" onchange="processAndUploadImage(event, 2)" class="text-[10px] text-slate-600 w-full">
+                  <input type="text" id="kapsyen2" oninput="updatePreview()" placeholder="Kapsyen 2" class="w-full bg-white border border-slate-300 rounded px-2 py-1 text-[11px]">
+                  <button type="button" id="editImgBtn2" onclick="openImageEditor(2)" class="hidden px-2 py-1 bg-white border border-slate-300 rounded text-[10px] font-bold text-slate-700"><i class="fa-solid fa-arrows-up-down-left-right mr-1"></i>Reposition</button>
+                </div>
+
+                <div class="p-2.5 border border-slate-300 rounded-xl bg-slate-50 space-y-1.5">
+                  <span class="text-[11px] font-bold text-slate-700 block">Gambar 3</span>
+                  <input type="file" id="fileImg3" accept="image/*" onchange="processAndUploadImage(event, 3)" class="text-[10px] text-slate-600 w-full">
+                  <input type="text" id="kapsyen3" oninput="updatePreview()" placeholder="Kapsyen 3" class="w-full bg-white border border-slate-300 rounded px-2 py-1 text-[11px]">
+                  <button type="button" id="editImgBtn3" onclick="openImageEditor(3)" class="hidden px-2 py-1 bg-white border border-slate-300 rounded text-[10px] font-bold text-slate-700"><i class="fa-solid fa-arrows-up-down-left-right mr-1"></i>Reposition</button>
+                </div>
+
+                <div class="p-2.5 border border-slate-300 rounded-xl bg-slate-50 space-y-1.5">
+                  <span class="text-[11px] font-bold text-slate-700 block">Gambar 4</span>
+                  <input type="file" id="fileImg4" accept="image/*" onchange="processAndUploadImage(event, 4)" class="text-[10px] text-slate-600 w-full">
+                  <input type="text" id="kapsyen4" oninput="updatePreview()" placeholder="Kapsyen 4" class="w-full bg-white border border-slate-300 rounded px-2 py-1 text-[11px]">
+                  <button type="button" id="editImgBtn4" onclick="openImageEditor(4)" class="hidden px-2 py-1 bg-white border border-slate-300 rounded text-[10px] font-bold text-slate-700"><i class="fa-solid fa-arrows-up-down-left-right mr-1"></i>Reposition</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- BUTANG SIMPAN & CETAK -->
+            <div class="pt-2 flex items-center space-x-3">
+              <button type="submit" id="submitBtn" class="flex-1 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl shadow transition flex items-center justify-center space-x-2 text-xs">
+                <i class="fa-solid fa-file-arrow-down"></i>
+                <span id="submitBtnText">Simpan Laporan & Muat Turun PDF</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- LIVE PREVIEW & PRINT AREA -->
+        <div class="lg:col-span-6 space-y-4">
+          <div class="sticky top-28 space-y-3">
+            <div class="flex items-center justify-between no-print">
+              <h3 class="text-xs font-bold text-slate-700 uppercase flex items-center space-x-1.5">
+                <i class="fa-solid fa-eye text-slate-900"></i> <span>Pratonton Laporan OPR</span>
+              </h3>
+              <button onclick="triggerPrint()" class="px-3 py-1 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs rounded-lg border border-slate-300">
+                <i class="fa-solid fa-print mr-1"></i> Cetak PDF Sahaja
+              </button>
+            </div>
+
+            <!-- CONTAINER PRATONTON STRICT 1 PAGE A4 -->
+            <div id="previewShell">
+            <p id="reportFitNotice" class="hidden mb-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] font-semibold text-amber-800">Kandungan terlalu panjang untuk satu halaman A4. Sila ringkaskan isi laporan sebelum menjana PDF.</p>
+            <div id="printArea" class="bg-white border border-slate-300 shadow-lg rounded-2xl p-4 text-slate-900 text-[8.5pt] font-sans leading-tight print:border-none print:shadow-none print:rounded-none print:p-0">
+              <div id="printContent" class="space-y-2">
+              
+              <!-- HEADER TERKEMAS -->
+              <div class="grid grid-cols-[140px_1fr_140px] items-center pb-2 border-b border-slate-300 page-break-avoid">
+                <img src="assets/logo-ppdpu.png" class="h-[60px] w-[140px] max-w-full object-contain object-center justify-self-start" alt="Logo Kementerian Pendidikan Malaysia dan PPD Petaling Utama">
+                <div class="text-center">
+                  <h4 class="whitespace-nowrap font-extrabold text-[8.7pt] uppercase tracking-normal text-slate-900 leading-tight">
+                    LAPORAN RINGKAS PROGRAM / AKTIVITI (ONE PAGE REPORT)
+                  </h4>
+                  <p class="text-[8pt] text-slate-700 font-bold uppercase mt-0.5">PEJABAT PENDIDIKAN DAERAH PETALING UTAMA</p>
+                  <p class="text-[7pt] text-slate-500 italic mt-0.5 font-normal">"PENDIDIKAN BERMUTU, INSAN TERDIDIK, NEGARA SEJAHTERA"</p>
+                </div>
+                <div aria-hidden="true"></div>
+              </div>
+
+              <!-- HERO IMAGE -->
+              <div id="prevHeroBox" class="relative w-full aspect-video bg-slate-900 rounded-lg overflow-hidden flex items-end page-break-avoid border border-slate-800">
+                <img id="prevImg1" class="absolute inset-0 w-full h-full object-cover object-center hidden">
+                <div class="relative z-10 w-full bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent p-2.5 text-white">
+                  <h2 id="prevTajuk" class="text-xs sm:text-sm font-extrabold uppercase tracking-wide leading-tight text-white"></h2>
+                </div>
+              </div>
+
+              <!-- MAKLUMAT PROGRAM -->
+              <div class="border border-slate-300 rounded-md bg-slate-50 page-break-avoid text-[7.5pt]">
+                <div class="flex flex-wrap items-stretch justify-center divide-x divide-slate-300 text-slate-800">
+                  <div class="px-3 pt-1.5 pb-2 text-center leading-[1.35]"><span class="block text-[5.5pt] font-extrabold tracking-[0.12em] text-slate-500">TARIKH</span><span id="prevTarikh" class="block mt-0.5 font-bold leading-tight"></span></div>
+                  <div class="px-3 pt-1.5 pb-2 text-center leading-[1.35]"><span class="block text-[5.5pt] font-extrabold tracking-[0.12em] text-slate-500">MASA</span><span id="prevMasa" class="block mt-0.5 font-bold leading-tight"></span></div>
+                  <div class="px-3 pt-1.5 pb-2 text-center leading-[1.35]"><span class="block text-[5.5pt] font-extrabold tracking-[0.12em] text-slate-500">SASARAN</span><span id="prevSasaran" class="block mt-0.5 font-bold leading-tight"></span></div>
+                  <div id="prevPelibatanBox" class="hidden px-3 pt-1.5 pb-2 text-center leading-[1.35]"><span class="block text-[5.5pt] font-extrabold tracking-[0.12em] text-slate-500">KERJASAMA</span><span id="prevPelibatan" class="block mt-0.5 font-bold leading-tight"></span></div>
+                </div>
+              </div>
+
+              <!-- KAD OBJEKTIF -->
+              <div class="border border-slate-300 rounded-lg p-2 bg-slate-50/50 page-break-avoid">
+                <p class="font-extrabold text-slate-900 text-[8pt] border-b border-slate-200 pb-0.5 uppercase">OBJEKTIF PROGRAM</p>
+                <p id="prevObjektif" class="whitespace-pre-wrap text-slate-800 mt-0.5 text-[8pt] leading-normal"></p>
+              </div>
+
+              <!-- KAD KEKUATAN -->
+              <div class="border border-slate-300 rounded-lg p-2 bg-slate-50/50 page-break-avoid">
+                <p class="font-extrabold text-slate-900 text-[8pt] border-b border-slate-200 pb-0.5 uppercase">KEKUATAN PROGRAM</p>
+                <p id="prevKekuatan" class="whitespace-pre-wrap text-slate-800 mt-0.5 text-[8pt] leading-normal"></p>
+              </div>
+
+              <!-- KAD PENAMBAHBAIKAN -->
+              <div class="border border-slate-300 rounded-lg p-2 bg-slate-50/50 page-break-avoid">
+                <p class="font-extrabold text-slate-900 text-[8pt] border-b border-slate-200 pb-0.5 uppercase">PENAMBAHBAIKAN & CADANGAN</p>
+                <p id="prevPenambahbaikan" class="whitespace-pre-wrap text-slate-800 mt-0.5 text-[8pt] leading-normal"></p>
+              </div>
+
+              <!-- GAMBAR GRID LAMPIRAN BERGAMBAR -->
+              <div id="prevGalleryBox" class="border border-slate-300 rounded-lg p-2 bg-white space-y-1 page-break-avoid hidden">
+                <p class="font-bold text-slate-900 text-[7.5pt] uppercase">📸 LAMPIRAN BERGAMBAR</p>
+                
+                <div class="grid grid-cols-3 gap-2">
+                  <div id="boxImg2" class="border border-slate-200 rounded p-1 text-center bg-slate-50 hidden">
+                    <img id="prevImg2" class="aspect-[4/3] w-full object-cover object-center rounded">
+                    <span id="prevCap2" class="text-[7pt] text-slate-600 italic block mt-0.5 font-medium truncate"></span>
+                  </div>
+
+                  <div id="boxImg3" class="border border-slate-200 rounded p-1 text-center bg-slate-50 hidden">
+                    <img id="prevImg3" class="aspect-[4/3] w-full object-cover object-center rounded">
+                    <span id="prevCap3" class="text-[7pt] text-slate-600 italic block mt-0.5 font-medium truncate"></span>
+                  </div>
+
+                  <div id="boxImg4" class="border border-slate-200 rounded p-1 text-center bg-slate-50 hidden">
+                    <img id="prevImg4" class="aspect-[4/3] w-full object-cover object-center rounded">
+                    <span id="prevCap4" class="text-[7pt] text-slate-600 italic block mt-0.5 font-medium truncate"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FOOTER PREVIEW -->
+              <div class="pt-1.5 border-t border-slate-300 text-[7.5pt] text-slate-700 flex justify-between items-end page-break-avoid">
+                <div>
+                  <p><strong>Disediakan oleh:</strong> <span id="prevNama" class="font-bold"></span> (<span id="prevJawatan"></span>)</p>
+                  <p><strong>Tarikh Laporan:</strong> <span id="prevTarikhLaporan"></span></p>
+                </div>
+                <div class="text-right text-[6.5pt] text-slate-400">
+                  Sektor Pembelajaran | PPD Petaling Utama
+                </div>
+              </div>
+
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: ARKIB OPR ==================== -->
+    <section id="sec-pegawai" class="hidden space-y-6 no-print">
+      <div class="glass-card p-6 rounded-2xl shadow-sm">
+        <h2 class="text-lg font-bold text-slate-900 mb-1">Arkib OPR Pegawai</h2>
+        <p class="text-xs text-slate-500 mb-6">Pilih pegawai untuk melihat sejarah laporan atau membuat cetakan semula.</p>
+
+        <div id="pegawaiGrid" class="grid grid-cols-1 md:grid-cols-3 gap-5"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="fixed inset-x-0 bottom-0 z-40 border-t border-white/15 bg-slate-950/75 text-slate-200 backdrop-blur-md no-print">
+    <div class="mx-auto flex h-8 max-w-7xl items-center justify-center px-4 text-[10px] font-semibold tracking-wide sm:h-11 sm:justify-end sm:px-6 sm:text-xs lg:px-8">
+      Sektor Pembelajaran | PPD Petaling Utama
+    </div>
+  </footer>
+
+  <!-- MODAL HISTORY PEGAWAI (NO PRINT) -->
+  <div id="historyModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-2xl max-w-3xl w-full p-6 shadow-2xl border border-slate-200 max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center pb-4 border-b border-slate-200">
+        <div>
+          <h3 id="modalPegawaiName" class="text-lg font-bold text-slate-900">Sejarah OPR Pegawai</h3>
+          <p id="modalPegawaiJawatan" class="text-xs text-slate-500"></p>
+        </div>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 text-lg w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div id="modalOprList" class="flex-1 overflow-y-auto py-4 space-y-3 custom-scrollbar"></div>
+    </div>
+  </div>
+
+  <!-- EDITOR GAMBAR -->
+  <div id="imageEditorModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[70] hidden items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-2xl w-full max-w-3xl shadow-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-slate-200">
+        <div>
+          <h3 class="font-extrabold text-slate-900">Kedudukan Gambar</h3>
+          <p class="text-xs text-slate-500">Tarik gambar untuk menetapkan kedudukan yang akan muncul dalam pratonton dan PDF.</p>
+        </div>
+        <button type="button" onclick="closeImageEditor()" class="w-9 h-9 rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="h-[55vh] min-h-[320px] bg-slate-950 p-3">
+        <img id="cropperImage" alt="Editor gambar" class="max-w-full block">
+      </div>
+      <div class="px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="cropReset()" class="px-3 py-2 rounded-lg border border-slate-300 text-xs font-bold"><i class="fa-solid fa-rotate-left mr-1"></i>Kembali Asal</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="closeImageEditor()" class="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Batal</button>
+          <button type="button" onclick="applyImageCrop()" class="px-4 py-2 rounded-lg bg-slate-900 text-white text-xs font-bold"><i class="fa-solid fa-check mr-1"></i>Gunakan Gambar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATUS SIMPAN & PDF -->
+  <div id="saveProgressModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-[80] hidden items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl">
+      <h3 class="text-lg font-extrabold text-slate-900">Menyediakan Laporan OPR</h3>
+      <p class="text-xs text-slate-500 mt-1">Jangan tutup halaman sehingga semua langkah selesai.</p>
+      <div class="mt-5 space-y-3">
+        <div id="step-images" class="progress-step flex items-center gap-3" data-status="pending">
+          <span class="step-icon w-8 h-8 rounded-full border-2 border-slate-300 text-slate-400 flex items-center justify-center shrink-0"><i class="fa-solid fa-image"></i></span>
+          <span class="step-label text-sm text-slate-600">Memproses gambar…</span>
+        </div>
+        <div id="step-pdf" class="progress-step flex items-center gap-3" data-status="pending">
+          <span class="step-icon w-8 h-8 rounded-full border-2 border-slate-300 text-slate-400 flex items-center justify-center shrink-0"><i class="fa-solid fa-file-pdf"></i></span>
+          <span class="step-label text-sm text-slate-600">Menjana PDF…</span>
+        </div>
+        <div id="step-drive" class="progress-step flex items-center gap-3" data-status="pending">
+          <span class="step-icon w-8 h-8 rounded-full border-2 border-slate-300 text-slate-400 flex items-center justify-center shrink-0"><i class="fa-brands fa-google-drive"></i></span>
+          <span class="step-label text-sm text-slate-600">Menyimpan ke Drive…</span>
+        </div>
+        <div id="step-done" class="progress-step flex items-center gap-3" data-status="pending">
+          <span class="step-icon w-8 h-8 rounded-full border-2 border-slate-300 text-slate-400 flex items-center justify-center shrink-0"><i class="fa-solid fa-flag-checkered"></i></span>
+          <span class="step-label text-sm text-slate-600">Selesai</span>
+        </div>
+      </div>
+      <p id="saveProgressMessage" class="hidden mt-4 rounded-lg bg-red-50 border border-red-200 p-3 text-xs text-red-700"></p>
+      <button id="closeProgressBtn" type="button" onclick="closeSaveProgress()" class="hidden mt-4 w-full py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold">Tutup</button>
+    </div>
+  </div>
+
+  <script>
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbweu_PDwEIGHcY8qateu_CmmQx__4JGIAu2BjD9jiRoPuX0so_if183wZ9eWALwLnomdQ/exec";
+
+    let state = {
+      pegawai: [],
+      respon: [],
+      images: { 1: null, 2: null, 3: null, 4: null }
+    };
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById("tarikhLaporan").value = today;
+      loadData();
+      updatePreview();
+    });
+
+    function switchTab(tab) {
+      document.getElementById("sec-dashboard").classList.add("hidden");
+      document.getElementById("sec-form").classList.add("hidden");
+      document.getElementById("sec-pegawai").classList.add("hidden");
+
+      const inactiveTabClass = "flex-1 whitespace-nowrap px-2 py-2 text-xs font-semibold rounded-lg transition-all text-slate-300 hover:text-white sm:flex-none sm:px-4 sm:text-sm";
+      const activeTabClass = "flex-1 whitespace-nowrap px-2 py-2 text-xs font-semibold rounded-lg transition-all bg-slate-100 text-slate-900 shadow sm:flex-none sm:px-4 sm:text-sm";
+      document.getElementById("tab-dashboard").className = inactiveTabClass;
+      document.getElementById("tab-form").className = inactiveTabClass;
+      document.getElementById("tab-pegawai").className = inactiveTabClass;
+
+      document.getElementById("sec-" + tab).classList.remove("hidden");
+      const activeBtn = document.getElementById("tab-" + tab);
+      activeBtn.className = activeTabClass;
+      if (tab === "pegawai") renderOfficerGridIfNeeded();
+      if (tab === "form") updatePreview();
+    }
+
+    // Helper penukar format tarikh kepada YYYY-MM-DD
+    function formatDateForInput(dateStr) {
+      if (!dateStr) return "";
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) {
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+      const match = String(dateStr).match(/\d{4}-\d{2}-\d{2}/);
+      return match ? match[0] : "";
+    }
+
+    async function loadData(isRefresh = false) {
+      const refreshSpinner = document.getElementById("refreshSpinner");
+      if (isRefresh && refreshSpinner) refreshSpinner.classList.add("fa-spin");
+
+      try {
+        const response = await fetch(`${GAS_WEB_APP_URL}?action=getInitialData`);
+        const result = await response.json();
+
+        if (result.status === "success") {
+          state.pegawai = result.pegawai || [];
+          state.respon = result.respon || [];
+
+          renderStats();
+          renderTable(state.respon);
+          populatePegawaiDropdown();
+          renderPegawaiGrid();
+        }
+      } catch (err) {
+        console.error("Gagal tarik data:", err);
+      } finally {
+        if (isRefresh && refreshSpinner) refreshSpinner.classList.remove("fa-spin");
+      }
+    }
+
+    function renderStats() {
+      document.getElementById("statTotalOpr").innerText = state.respon.length;
+      document.getElementById("statTotalPegawai").innerText = state.pegawai.length;
+      
+      const thisMonth = new Date().getMonth();
+      const countMonth = state.respon.filter(r => r.timestamp && new Date(r.timestamp).getMonth() === thisMonth).length;
+      document.getElementById("statMonthOpr").innerText = countMonth;
+    }
+
+    function renderTable(data) {
+      const tbody = document.getElementById("oprTableBody");
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400">Tiada laporan OPR direkodkan lagi.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = data.map(r => `
+        <tr class="hover:bg-slate-50 transition border-b border-slate-200">
+          <td class="py-3 px-4 font-mono text-[11px] text-slate-500">${r.timestamp || '-'}</td>
+          <td class="py-3 px-4 font-bold text-slate-900">${r.tajukProgram}</td>
+          <td class="py-3 px-4 text-slate-600">${r.tarikhPelaksanaan}</td>
+          <td class="py-3 px-4 text-slate-700">${r.namaPegawai}</td>
+          <td class="py-3 px-4 text-center">
+            <button onclick='loadOprForEdit(${JSON.stringify(r).replace(/'/g, "&apos;")})' class="px-3 py-1 bg-slate-900 text-white hover:bg-slate-800 rounded-lg font-bold text-[11px] transition space-x-1 shadow-sm">
+              <i class="fa-solid fa-pen-to-square"></i>
+              <span>Edit & Cetak</span>
+            </button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function filterTable() {
+      const q = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = state.respon.filter(r => 
+        r.tajukProgram.toLowerCase().includes(q) || 
+        r.namaPegawai.toLowerCase().includes(q)
+      );
+      renderTable(filtered);
+    }
+
+    function populatePegawaiDropdown() {
+      const field = document.getElementById("namaPegawai");
+      if (field) field.value = field.value || "";
+      hidePegawaiSuggestions();
+    }
+
+    function hidePegawaiSuggestions() {
+      const list = document.getElementById("pegawaiSuggestions");
+      if (list) {
+        list.innerHTML = "";
+        list.classList.add("hidden");
+      }
+    }
+
+    function filterPegawaiSuggestions() {
+      const field = document.getElementById("namaPegawai");
+      const list = document.getElementById("pegawaiSuggestions");
+      if (!field || !list) return;
+      const query = field.value.trim().toLocaleLowerCase("ms-MY");
+      autoFillJawatan();
+      if (!query) return hidePegawaiSuggestions();
+      const matches = state.pegawai
+        .filter(person => person.nama.toLocaleLowerCase("ms-MY").includes(query))
+        .slice(0, 8);
+      list.innerHTML = "";
+      if (!matches.length) return hidePegawaiSuggestions();
+      matches.forEach(person => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "w-full px-3 py-2 text-left hover:bg-slate-50 border-b last:border-b-0 border-slate-100 transition";
+        const name = document.createElement("span");
+        name.className = "block text-xs font-bold text-slate-800";
+        name.textContent = person.nama;
+        const position = document.createElement("span");
+        position.className = "block text-[10px] text-slate-500 mt-0.5";
+        position.textContent = person.jawatan || "";
+        button.append(name, position);
+        button.addEventListener("mousedown", event => {
+          event.preventDefault();
+          selectPegawai(person.nama);
+        });
+        list.appendChild(button);
+      });
+      list.classList.remove("hidden");
+    }
+
+    function selectPegawai(name) {
+      document.getElementById("namaPegawai").value = name;
+      autoFillJawatan();
+      hidePegawaiSuggestions();
+    }
+
+    function autoFillJawatan() {
+      const selectedName = document.getElementById("namaPegawai").value.trim();
+      const found = state.pegawai.find(p => p.nama === selectedName);
+      if (found) {
+        document.getElementById("jawatanPegawai").value = found.jawatan;
+      }
+      updatePreview();
+    }
+
+    document.addEventListener("click", event => {
+      if (!event.target.closest("#namaPegawai") && !event.target.closest("#pegawaiSuggestions")) hidePegawaiSuggestions();
+    });
+
+    function compressImage(file, maxWidth = 1000, quality = 0.7) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+        };
+      });
+    }
+
+    async function processAndUploadImage(e, index) {
+      const file = e.target.files[0];
+      if (file) {
+        const compressedBase64 = await compressImage(file);
+        state.images[index] = compressedBase64;
+        updatePreview();
+      }
+    }
+
+    function updatePreview() {
+      document.getElementById("prevTajuk").innerText = document.getElementById("tajukProgram").value || "";
+      document.getElementById("prevTarikh").innerText = document.getElementById("tarikhPelaksanaan").value || "";
+      document.getElementById("prevMasa").innerText = document.getElementById("masa").value || "";
+      document.getElementById("prevSasaran").innerText = document.getElementById("sasaran").value || "";
+      
+      const pelibatanVal = document.getElementById("pelibatan").value;
+      if (pelibatanVal) {
+        document.getElementById("prevPelibatan").innerText = pelibatanVal;
+        document.getElementById("prevPelibatanBox").classList.remove("hidden");
+      } else {
+        document.getElementById("prevPelibatanBox").classList.add("hidden");
+      }
+
+      document.getElementById("prevObjektif").innerText = document.getElementById("objektif").value || "";
+      document.getElementById("prevKekuatan").innerText = document.getElementById("kekuatan").value || "";
+      document.getElementById("prevPenambahbaikan").innerText = document.getElementById("penambahbaikan").value || "";
+      document.getElementById("prevNama").innerText = document.getElementById("namaPegawai").value || "";
+      document.getElementById("prevJawatan").innerText = document.getElementById("jawatanPegawai").value || "";
+      document.getElementById("prevTarikhLaporan").innerText = document.getElementById("tarikhLaporan").value || "";
+
+      // Kemaskini Pratonton Gambar 1 (Hero)
+      const img1El = document.getElementById("prevImg1");
+      if (state.images[1]) {
+        img1El.src = state.images[1];
+        img1El.classList.remove("hidden");
+      } else {
+        img1El.src = "";
+        img1El.classList.add("hidden");
+      }
+
+      // Kemaskini Pratonton Gambar 2, 3, 4
+      let hasGallery = false;
+      for (let i = 2; i <= 4; i++) {
+        const boxEl = document.getElementById(`boxImg${i}`);
+        const imgEl = document.getElementById(`prevImg${i}`);
+        const capVal = document.getElementById(`kapsyen${i}`).value;
+        const capEl = document.getElementById(`prevCap${i}`);
+
+        if (capEl) capEl.innerText = capVal || `Gambar ${i}`;
+
+        if (state.images[i]) {
+          if (imgEl) imgEl.src = state.images[i];
+          if (boxEl) boxEl.classList.remove("hidden");
+          hasGallery = true;
+        } else {
+          if (imgEl) imgEl.src = "";
+          if (boxEl) boxEl.classList.add("hidden");
+        }
+      }
+
+      if (hasGallery) {
+        document.getElementById("prevGalleryBox").classList.remove("hidden");
+      } else {
+        document.getElementById("prevGalleryBox").classList.add("hidden");
+      }
+    }
+
+    function clearField(fieldId) {
+      document.getElementById(fieldId).value = "";
+      updatePreview();
+    }
+
+    function structuredPrefix(type) {
+      return type === "objektif" ? "1. " : "● ";
+    }
+
+    function handleStructuredInput(field, type) {
+      // Melindungi input tampal atau teks yang ditaip selepas medan dikosongkan.
+      if (field.value && !field.value.trimStart().match(type === "objektif" ? /^\d+\.\s*/ : /^[●•\-*]\s*/)) {
+        const cursor = field.selectionStart;
+        const prefix = structuredPrefix(type);
+        field.value = prefix + field.value.trimStart();
+        field.setSelectionRange(cursor + prefix.length, cursor + prefix.length);
+      }
+      updatePreview();
+    }
+
+    function handleStructuredEnter(event, type) {
+      const field = event.target;
+      // Letakkan penanda sebelum aksara pertama ditaip, bukan selepas Enter.
+      if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey && !event.isComposing && !field.value.trim()) {
+        const prefix = structuredPrefix(type);
+        field.value = prefix;
+        field.setSelectionRange(prefix.length, prefix.length);
+      }
+
+      if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
+      event.preventDefault();
+      const start = field.selectionStart;
+      const currentLine = field.value.slice(0, start).split("\n").pop();
+      let nextPrefix;
+
+      if (type === "objektif") {
+        const numbered = currentLine.match(/^(\s*)(\d+)\.\s*/);
+        nextPrefix = numbered ? `${numbered[1]}${Number(numbered[2]) + 1}. ` : "1. ";
+      } else {
+        const bulleted = currentLine.match(/^(\s*)[●•\-*]\s*/);
+        nextPrefix = bulleted ? `${bulleted[1]}● ` : "● ";
+      }
+
+      field.setRangeText(`\n${nextPrefix}`, start, field.selectionEnd, "end");
+      updatePreview();
+    }
+
+    function resetOprForm() {
+      if (confirm("Adakah anda pasti untuk mengosongkan borang?")) {
+        document.getElementById("oprForm").reset();
+        document.getElementById("editRowId").value = "";
+        state.images = { 1: null, 2: null, 3: null, 4: null };
+        
+        for (let i = 1; i <= 4; i++) {
+          const fEl = document.getElementById(`fileImg${i}`);
+          if (fEl) fEl.value = "";
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById("tarikhLaporan").value = today;
+        document.getElementById("submitBtnText").innerText = "Cetak / Simpan Sebagai PDF & Hantar Data";
+        updatePreview();
+      }
+    }
+
+    const suggestionStocks = {
+      objektif: [
+        "Meningkatkan kefahaman {sasaran} berkaitan pengisian dan pelaksanaan {tajuk}.",
+        "Memperkukuh pengetahuan serta kemahiran {sasaran} melalui pendedahan yang terancang.",
+        "Menyediakan ruang pembelajaran aktif untuk {sasaran} berkongsi pengalaman dan amalan terbaik.",
+        "Meningkatkan keupayaan {sasaran} mengaplikasikan input program dalam tugas dan tindakan susulan.",
+        "Menyelaras hala tuju pelaksanaan antara {sasaran} agar selari dengan keperluan semasa.",
+        "Membina keyakinan {sasaran} untuk melaksanakan inisiatif yang diperoleh secara lebih berkesan.",
+        "Memantapkan kompetensi profesional {sasaran} menerusi perkongsian input yang relevan.",
+        "Menggalakkan budaya pembelajaran berterusan dalam kalangan {sasaran}.",
+        "Memperluas jaringan kerjasama dan perkongsian idea dalam kalangan {sasaran}.",
+        "Memberi pendedahan kepada {sasaran} terhadap pendekatan, strategi dan amalan semasa.",
+        "Meningkatkan kesedaran {sasaran} terhadap peranan masing-masing dalam menjayakan program.",
+        "Memudah cara {sasaran} mengenal pasti langkah praktikal yang boleh dilaksanakan selepas program.",
+        "Memperkasa {sasaran} untuk membuat perancangan dan keputusan yang lebih berfokus.",
+        "Mewujudkan kefahaman bersama dalam kalangan {sasaran} terhadap matlamat {tajuk}.",
+        "Mengukuhkan penguasaan {sasaran} terhadap kaedah pelaksanaan yang sistematik dan berimpak.",
+        "Merangsang idea baharu serta inovasi dalam kalangan {sasaran} melalui sesi interaktif.",
+        "Meningkatkan kesediaan {sasaran} untuk menghadapi cabaran pelaksanaan di peringkat masing-masing.",
+        "Membudayakan amalan refleksi dan penambahbaikan berterusan dalam kalangan {sasaran}.",
+        "Memastikan {sasaran} mendapat maklumat yang tepat, jelas dan boleh dilaksanakan.",
+        "Menggalakkan kolaborasi yang lebih erat antara {sasaran} dan pihak berkaitan."
+      ],
+      kekuatan: [
+        "Komitmen dan penglibatan aktif {sasaran} sepanjang pelaksanaan program.",
+        "Pengisian program yang jelas, tersusun dan menepati keperluan {sasaran}.",
+        "Kerjasama baik antara urus setia, penceramah dan peserta telah melancarkan perjalanan program.",
+        "Penyampaian yang interaktif berjaya menarik perhatian serta menggalakkan penglibatan peserta.",
+        "Pengurusan masa program berjalan dengan teratur mengikut tentatif yang ditetapkan.",
+        "Maklum balas peserta menunjukkan penerimaan yang baik terhadap pengisian program.",
+        "Penceramah berjaya menyampaikan input secara berfokus, jelas dan mudah difahami.",
+        "Bahan pembentangan dan aktiviti yang disediakan menyokong pemahaman peserta dengan baik.",
+        "Suasana pembelajaran yang positif mendorong peserta untuk bertanya dan berkongsi pandangan.",
+        "Penglibatan pihak berkaitan membantu memperkukuh kelancaran pelaksanaan program.",
+        "Sesi perkongsian pengalaman memberi nilai tambah kepada {sasaran}.",
+        "Aktiviti yang dilaksanakan bersesuaian dengan objektif dan hasil yang disasarkan.",
+        "Urus setia memberi respons yang cekap terhadap keperluan peserta sepanjang program.",
+        "Penggunaan kaedah pelaksanaan yang pelbagai menjadikan program lebih menarik dan berkesan.",
+        "Peserta menunjukkan kesediaan untuk mengaplikasikan input yang diperoleh dalam tugas masing-masing.",
+        "Komunikasi yang baik antara semua pihak membantu mengelakkan sebarang gangguan pelaksanaan.",
+        "Sokongan pengurusan dan pihak kerjasama menyumbang kepada kejayaan program.",
+        "Dokumentasi serta penyelarasan awal yang baik memudahkan urusan pelaksanaan.",
+        "Sesi soal jawab memberi peluang kepada peserta mendapatkan penjelasan secara langsung.",
+        "Objektif program dapat disampaikan dengan jelas melalui pengisian yang relevan dan praktikal."
+      ],
+      penambahbaikan: [
+        "Memanjangkan tempoh sesi praktikal supaya peserta mempunyai lebih ruang untuk mengaplikasikan input.",
+        "Menyediakan bahan rujukan awal agar peserta dapat membuat persediaan sebelum program berlangsung.",
+        "Memperbanyak aktiviti kumpulan bagi menggalakkan penglibatan dan perkongsian idea peserta.",
+        "Menyediakan sesi susulan untuk memantau pelaksanaan input program di peringkat masing-masing.",
+        "Menambah masa bagi sesi soal jawab untuk membolehkan isu peserta ditangani dengan lebih menyeluruh.",
+        "Memperluas hebahan awal supaya penyertaan daripada kumpulan sasaran dapat ditingkatkan.",
+        "Menyediakan contoh amalan terbaik yang lebih pelbagai dan dekat dengan situasi sebenar peserta.",
+        "Menggunakan borang maklum balas yang lebih terperinci untuk menilai keberkesanan program.",
+        "Memastikan bahan pembentangan dikongsi selepas program sebagai rujukan peserta.",
+        "Memperkemas pengurusan masa setiap slot agar semua pengisian dapat disampaikan dengan optimum.",
+        "Menyusun aktiviti mengikut tahap keperluan peserta supaya pengisian lebih bersasar.",
+        "Mewujudkan kumpulan sokongan atau saluran komunikasi bagi tindakan susulan selepas program.",
+        "Menambah elemen demonstrasi dan latihan amali untuk mengukuhkan kefahaman peserta.",
+        "Mendapatkan keperluan awal peserta melalui tinjauan ringkas sebelum menetapkan pengisian.",
+        "Memperluas penglibatan rakan strategik bagi menambah nilai kepada pelaksanaan program.",
+        "Menyediakan panduan tindakan ringkas supaya peserta dapat melaksanakan susulan dengan lebih yakin.",
+        "Mengadakan sesi perkongsian susulan bagi menilai cabaran dan kejayaan pelaksanaan.",
+        "Memastikan kemudahan teknikal diuji lebih awal untuk mengelakkan gangguan semasa program.",
+        "Menambah variasi kaedah penyampaian bagi mengekalkan fokus dan minat peserta.",
+        "Merekod dapatan dan cadangan peserta untuk penambahbaikan penganjuran pada masa hadapan."
+      ]
+    };
+
+    function normaliseSuggestionText(value, fallback) {
+      const text = String(value || "").trim().replace(/\s+/g, " ");
+      return (text || fallback).toLocaleLowerCase("ms-MY");
+    }
+
+    function pickSuggestions(fieldType, tajuk, sasaran) {
+      const stock = suggestionStocks[fieldType] || [];
+      const selected = [...stock].sort(() => Math.random() - 0.5).slice(0, 3);
+      const target = normaliseSuggestionText(sasaran, "peserta");
+      const program = normaliseSuggestionText(tajuk, "program ini");
+      return selected.map((text, index) => {
+        const sentence = text.replaceAll("{tajuk}", program).replaceAll("{sasaran}", target);
+        return fieldType === "objektif" ? `${index + 1}. ${sentence}` : `● ${sentence}`;
+      }).join("\n");
+    }
+
+    function getAISuggestion(fieldType) {
+      const tajuk = document.getElementById("tajukProgram").value;
+      const sasaran = document.getElementById("sasaran").value;
+
+      if (!tajuk) {
+        alert("Sila isi 'Tajuk Program' terlebih dahulu.");
+        document.getElementById("tajukProgram").focus();
+        return;
+      }
+
+      const targetField = document.getElementById(fieldType);
+      targetField.value = pickSuggestions(fieldType, tajuk, sasaran);
+      updatePreview();
+    }
+
+    function triggerPrint() {
+      window.print();
+    }
+
+    async function handleSaveAndPrint(e) {
+      e.preventDefault();
+      
+      triggerPrint();
+
+      const submitBtn = document.getElementById("submitBtn");
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Menyimpan Rekod...</span>`;
+
+      const payload = {
+        editRowId: document.getElementById("editRowId").value || "",
+        namaPegawai: document.getElementById("namaPegawai").value,
+        jawatanPegawai: document.getElementById("jawatanPegawai").value,
+        tarikhLaporan: document.getElementById("tarikhLaporan").value,
+        tajukProgram: document.getElementById("tajukProgram").value,
+        tarikhPelaksanaan: document.getElementById("tarikhPelaksanaan").value,
+        masa: document.getElementById("masa").value,
+        sasaran: document.getElementById("sasaran").value,
+        pelibatan: document.getElementById("pelibatan").value,
+        objektif: document.getElementById("objektif").value,
+        kekuatan: document.getElementById("kekuatan").value,
+        penambahbaikan: document.getElementById("penambahbaikan").value,
+        gambar1: state.images[1] || "",
+        gambar2: state.images[2] || "",
+        kapsyen2: document.getElementById("kapsyen2").value,
+        gambar3: state.images[3] || "",
+        kapsyen3: document.getElementById("kapsyen3").value,
+        gambar4: state.images[4] || "",
+        kapsyen4: document.getElementById("kapsyen4").value
+      };
+
+      try {
+        const res = await fetch(GAS_WEB_APP_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        if (result.status === "success") {
+          alert("Rekod OPR berjaya dikemaskini dalam sistem!");
+          await loadData(true);
+        } else {
+          alert("Ralat simpan data: " + result.message);
+        }
+      } catch (err) {
+        console.error("Ralat simpan:", err);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa-solid fa-print"></i> <span id="submitBtnText">Cetak / Simpan Sebagai PDF & Hantar Data</span>`;
+      }
+    }
+
+    function loadOprForEdit(data) {
+      switchTab('form');
+
+      document.getElementById("editRowId").value = data.id || "";
+      document.getElementById("namaPegawai").value = data.namaPegawai || "";
+      document.getElementById("jawatanPegawai").value = data.jawatanPegawai || "";
+      document.getElementById("tarikhLaporan").value = formatDateForInput(data.tarikhLaporan);
+      document.getElementById("tajukProgram").value = data.tajukProgram || "";
+      document.getElementById("tarikhPelaksanaan").value = data.tarikhPelaksanaan || "";
+      document.getElementById("masa").value = data.masa || "";
+      document.getElementById("sasaran").value = data.sasaran || "";
+      document.getElementById("pelibatan").value = data.pelibatan || "";
+      document.getElementById("objektif").value = data.objektif || "";
+      document.getElementById("kekuatan").value = data.kekuatan || "";
+      document.getElementById("penambahbaikan").value = data.penambahbaikan || "";
+
+      document.getElementById("kapsyen2").value = data.kapsyen2 || "";
+      document.getElementById("kapsyen3").value = data.kapsyen3 || "";
+      document.getElementById("kapsyen4").value = data.kapsyen4 || "";
+
+      for (let i = 1; i <= 4; i++) {
+        const fEl = document.getElementById(`fileImg${i}`);
+        if (fEl) fEl.value = "";
+      }
+
+      state.images = {
+        1: data.gambar1 || null,
+        2: data.gambar2 || null,
+        3: data.gambar3 || null,
+        4: data.gambar4 || null
+      };
+
+      document.getElementById("submitBtnText").innerText = "Kemaskini Rekod & Cetak PDF";
+      closeModal();
+      updatePreview();
+    }
+
+    function renderPegawaiGrid() {
+      const grid = document.getElementById("pegawaiGrid");
+      if (state.pegawai.length === 0) {
+        grid.innerHTML = `<p class="col-span-3 text-slate-400 text-xs">Tiada data pegawai.</p>`;
+        return;
+      }
+
+      grid.innerHTML = state.pegawai.map(p => {
+        const oprs = state.respon.filter(r => r.namaPegawai === p.nama);
+        const jawatanRingkas = String(p.jawatan || "").trim().toUpperCase() === "SCHOOL IMPROVEMENT SPECIALIST COACH" ? "SISC+" : p.jawatan;
+        return `
+          <div onclick="openHistoryModal('${p.nama}')" class="p-5 min-h-[158px] bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow transition cursor-pointer flex items-start space-x-4">
+            <div class="w-12 h-12 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-lg">
+              ${p.nama.charAt(0)}
+            </div>
+            <div class="flex-1 min-w-0">
+              <h4 class="font-bold text-slate-900 text-sm truncate">${p.nama}</h4>
+              <p class="officer-job-title text-xs text-slate-500 leading-snug min-h-[2.5rem]">${jawatanRingkas || ""}</p>
+              <div class="mt-3 flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg">${oprs.length} OPR Dihantar</span>
+                <span class="text-slate-500 font-bold">Lihat <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function openHistoryModal(namaPegawai) {
+      const p = state.pegawai.find(x => x.nama === namaPegawai);
+      const oprs = state.respon.filter(r => r.namaPegawai === namaPegawai);
+
+      document.getElementById("modalPegawaiName").innerText = namaPegawai;
+      document.getElementById("modalPegawaiJawatan").innerText = p ? p.jawatan : "";
+
+      const modalList = document.getElementById("modalOprList");
+      if (oprs.length === 0) {
+        modalList.innerHTML = `<p class="text-center text-slate-400 py-8 text-xs">Pegawai ini belum pernah menghantar OPR.</p>`;
+      } else {
+        modalList.innerHTML = oprs.map(r => `
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between">
+            <div>
+              <h5 class="font-bold text-slate-900 text-xs">${r.tajukProgram}</h5>
+              <p class="text-[11px] text-slate-500 mt-0.5"><i class="fa-regular fa-calendar"></i> ${r.tarikhPelaksanaan} | ${r.masa}</p>
+            </div>
+            <button onclick='loadOprForEdit(${JSON.stringify(r).replace(/'/g, "&apos;")})' class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition flex items-center space-x-1">
+              <i class="fa-solid fa-pen-to-square"></i>
+              <span>Edit / Cetak</span>
+            </button>
+          </div>
+        `).join("");
+      }
+
+      document.getElementById("historyModal").classList.remove("hidden");
+    }
+
+    function closeModal() {
+      document.getElementById("historyModal").classList.add("hidden");
+    }
+  </script>
+  <script src="app-v15.js?v=21-review"></script>
 </body>
 </html>
