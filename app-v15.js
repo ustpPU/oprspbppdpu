@@ -320,10 +320,29 @@ function triggerPrint() {
   window.print();
 }
 
+let savingReport = false;
+let uncertainSave = false;
+let savedDownload;
+
+function setReportMode(rowId) {
+  document.getElementById("editRowId").value = rowId || "";
+  document.getElementById("submitBtnText").textContent = rowId ? "Kemaskini & Muat Turun PDF" : "Simpan Laporan & Muat Turun PDF";
+  const label = document.getElementById("reportMode");
+  label.hidden = !rowId;
+  label.textContent = rowId ? `Mode Edit · Rekod #${rowId}` : "";
+}
+
+function downloadSavedReport() {
+  if (savedDownload) downloadBlob(savedDownload.blob, savedDownload.name);
+}
+
 function resetOprForm() {
+  if (savingReport) return;
   if (!confirm("Adakah anda pasti untuk mengosongkan borang?")) return;
   document.getElementById("oprForm").reset();
-  document.getElementById("editRowId").value = "";
+  showFormPane("entry");
+  uncertainSave = false;
+  setReportMode("");
   state.images = createImageState();
   for (let index = 1; index <= 4; index++) {
     document.getElementById(`fileImg${index}`).value = "";
@@ -335,21 +354,21 @@ function resetOprForm() {
 }
 
 async function loadOprForEdit(summary) {
+  if (savingReport) return;
+  const previousId = document.getElementById("editRowId").value;
+  let loaded = false;
   switchTab("form");
+  showFormPane("entry");
   closeModal();
   const submitBtn = document.getElementById("submitBtn");
   const originalHtml = submitBtn.innerHTML;
   submitBtn.disabled = true;
   submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i><span>Memuatkan laporan…</span>`;
   try {
-    let data = summary;
-    try {
-      const response = await fetch(`${getApiUrl()}?action=getRecord&rowId=${encodeURIComponent(summary.id)}`, { cache: "no-store" });
-      const result = await response.json();
-      if (result.status === "success" && result.record) data = result.record;
-    } catch (loadError) {
-      console.warn("Menggunakan data ringkas kerana butiran penuh gagal dimuatkan.", loadError);
-    }
+    const response = await fetch(`${getApiUrl()}?action=getRecord&rowId=${encodeURIComponent(summary.id)}`, { cache: "no-store" });
+    const result = await response.json();
+    if (!response.ok || result.status !== "success" || !result.record?.id) throw new Error("Butiran penuh laporan tidak dapat dimuatkan.");
+    const data = result.record;
 
     document.getElementById("editRowId").value = data.id || "";
     document.getElementById("namaPegawai").value = data.namaPegawai || "";
@@ -381,11 +400,15 @@ async function loadOprForEdit(summary) {
       document.getElementById(`editImgBtn${index}`).classList.toggle("hidden", !imageData);
     }
 
+    loaded = true;
+    uncertainSave = false;
     updatePreview();
+  } catch (error) {
+    alert(error.message || "Butiran laporan tidak dapat dimuatkan.");
   } finally {
     submitBtn.disabled = false;
     submitBtn.innerHTML = originalHtml;
-    document.getElementById("submitBtnText").innerText = "Kemaskini & Muat Turun PDF";
+    setReportMode(loaded ? summary.id : previousId);
   }
 }
 
@@ -444,41 +467,10 @@ function waitForPreviewImages() {
   }));
 }
 
-function addSelectableTextLayer(pdf, area) {
-  const areaRect = area.getBoundingClientRect();
-  const xScale = 210 / areaRect.width;
-  const yScale = 297 / areaRect.height;
-  const walker = document.createTreeWalker(area, NodeFilter.SHOW_TEXT);
-  const textNodes = [];
-  let node;
-  while ((node = walker.nextNode())) textNodes.push(node);
-
-  // Lapisan ini dilukis dahulu dan dilindungi oleh imej PDF di atasnya.
-  // Jadi rupa PDF kekal sama, tetapi teksnya boleh dicari dan disalin.
-  pdf.setFont("helvetica", "normal");
-  pdf.setTextColor(255, 255, 255);
-  textNodes.forEach(textNode => {
-    const parent = textNode.parentElement;
-    const text = String(textNode.nodeValue || "").replace(/\s+/g, " ").trim().replace(/[\u{1F000}-\u{1FAFF}]/gu, "");
-    if (!parent || !text || parent.closest("script, style, [aria-hidden='true']")) return;
-    const range = document.createRange();
-    range.selectNodeContents(textNode);
-    const rect = range.getBoundingClientRect();
-    if (!rect.width || !rect.height || rect.bottom < areaRect.top || rect.top > areaRect.bottom) return;
-    const fontSize = Math.max(2.2, parseFloat(getComputedStyle(parent).fontSize || "8") * yScale);
-    const x = Math.max(0, (rect.left - areaRect.left) * xScale);
-    const y = Math.max(fontSize, (rect.top - areaRect.top) * yScale + fontSize);
-    const maxWidth = Math.max(4, rect.width * xScale);
-    pdf.setFontSize(fontSize);
-    pdf.text(pdf.splitTextToSize(text, maxWidth), x, y, { lineHeightFactor: 1.15 });
-  });
-}
-
 let pdfLibraries;
 function loadPdfLibraries() {
   if (!pdfLibraries) {
     const dependencies = [
-      { src: "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js", ready: () => typeof window.html2canvas === "function" },
       { src: "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js", ready: () => typeof window.jspdf?.jsPDF === "function" }
     ];
     pdfLibraries = Promise.all(dependencies.map(({ src, ready }) => {
@@ -509,37 +501,75 @@ function loadPdfLibraries() {
 
 async function generatePdfBlob() {
   await loadPdfLibraries();
-  const area = document.getElementById("printArea");
-  const fit = fitReportToSinglePage();
-  if (fit.tooLong) throw new Error("Laporan terlalu panjang untuk satu halaman A4. Sila ringkaskan isi laporan.");
-  await new Promise(resolve => requestAnimationFrame(resolve));
-  await document.fonts.ready;
-  await waitForPreviewImages();
-  const oldTransform = area.style.transform;
-  area.classList.add("pdf-capture");
-  area.style.transform = "none";
-  try {
-    const canvas = await html2canvas(area, {
-      scale: 2,
-      useCORS: true,
-      allowTaint: false,
-      backgroundColor: "#ffffff",
-      logging: false,
-      width: area.offsetWidth,
-      height: area.offsetHeight,
-      windowWidth: area.offsetWidth,
-      windowHeight: area.offsetHeight
-    });
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4", compress: true });
-    addSelectableTextLayer(pdf, area);
-    pdf.addImage(canvas.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 210, 297, undefined, "FAST");
-    return pdf.output("blob");
-  } finally {
-    area.classList.remove("pdf-capture");
-    area.style.transform = oldTransform;
-    fitPreview();
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4", compress: true });
+  const value = id => document.getElementById(id).value.trim();
+  const clean = text => text.replace(/[\u2018\u2019]/g, "'").replace(/[\u201c\u201d]/g, '"').replace(/\u25cf/g, "\u2022");
+  const title = value("tajukProgram") || "Laporan OPR";
+  const gallery = [2, 3, 4].filter(index => state.images[index].dataUrl);
+  const sections = [
+    ["Tarikh Pelaksanaan", value("tarikhPelaksanaan")], ["Masa", value("masa")],
+    ["Sasaran", value("sasaran")], ["Pelibatan", value("pelibatan")],
+    ["Objektif Program", value("objektif")], ["Kekuatan", value("kekuatan")],
+    ["Penambahbaikan", value("penambahbaikan")],
+    ["Disediakan oleh", [value("namaPegawai"), value("jawatanPegawai"), value("tarikhLaporan")].filter(Boolean).join(" · ")]
+  ].filter(([, text]) => text);
+  const logo = document.querySelector("#printContent img");
+  const drawImage = (source, x, y, width, height) => {
+    const info = pdf.getImageProperties(source);
+    const scale = Math.min(width / info.width, height / info.height);
+    const w = info.width * scale, h = info.height * scale;
+    pdf.addImage(source, info.fileType, x + (width - w) / 2, y + (height - h) / 2, w, h);
+  };
+  const wrap = (text, width) => clean(text).split(/\r?\n/).flatMap(line => line ? pdf.splitTextToSize(line, width) : [""]);
+  pdf.setFont("helvetica", "bold").setFontSize(12);
+  const titleLines = wrap(title, 187);
+  const hero = state.images[1].dataUrl;
+  const galleryWidth = gallery.length ? (194 - (gallery.length - 1) * 3) / gallery.length : 0;
+  let layout;
+  for (const option of [{ font: 9, line: 3.7, hero: 52, photo: 32 }, { font: 8, line: 3.25, hero: 42, photo: 27 }, { font: 7.5, line: 3, hero: 34, photo: 23 }]) {
+    pdf.setFont("helvetica", "normal").setFontSize(option.font);
+    const content = sections.map(([label, text]) => [label, wrap(text, 189)]);
+    const captions = gallery.map(index => wrap(value("kapsyen" + index) || "Gambar " + index, galleryWidth - 2));
+    const galleryHeight = gallery.length ? option.photo + 5 + Math.max(...captions.map(lines => lines.length)) * option.line : 0;
+    const bottom = 32 + titleLines.length * 5 + (hero ? option.hero + 3 : 0)
+      + content.reduce((sum, [, lines]) => sum + 7 + lines.length * option.line, 0) + galleryHeight;
+    if (bottom <= 288) {
+      layout = { ...option, content, captions };
+      break;
+    }
   }
+  if (!layout) throw new Error("Laporan terlalu panjang untuk satu halaman A4. Sila ringkaskan isi laporan.");
+  pdf.setProperties({ title, author: "PPD Petaling Utama", subject: "Laporan Ringkas Program / Aktiviti" });
+  if (logo?.complete && logo.naturalWidth) drawImage(logo, 8, 7, 30, 17);
+  pdf.setFont("helvetica", "bold").setFontSize(10).setTextColor(15, 23, 42);
+  pdf.text("LAPORAN RINGKAS PROGRAM / AKTIVITI", 119, 12, { align: "center" });
+  pdf.setFontSize(8).text("PEJABAT PENDIDIKAN DAERAH PETALING UTAMA", 119, 17, { align: "center" });
+  pdf.setFont("helvetica", "italic").setFontSize(7);
+  pdf.text("PENDIDIKAN BERMUTU, INSAN TERDIDIK, NEGARA SEJAHTERA", 119, 21, { align: "center" });
+  pdf.setDrawColor(203, 213, 225).line(8, 26, 202, 26);
+  let y = 32;
+  pdf.setFont("helvetica", "bold").setFontSize(12);
+  titleLines.forEach(line => { pdf.text(line, 8, y); y += 5; });
+  if (hero) {
+    drawImage(hero, 8, y, 194, layout.hero);
+    y += layout.hero + 3;
+  }
+  for (const [label, lines] of layout.content) {
+    pdf.setFont("helvetica", "bold").setFontSize(8).setTextColor(15, 23, 42);
+    pdf.text(label, 8, y);
+    y += 4;
+    pdf.setFont("helvetica", "normal").setFontSize(layout.font).setTextColor(51, 65, 85);
+    lines.forEach(line => { pdf.text(line, 8, y); y += layout.line; });
+    y += 3;
+  }
+  gallery.forEach((index, position) => {
+    const x = 8 + position * (galleryWidth + 3);
+    drawImage(state.images[index].dataUrl, x, y, galleryWidth, layout.photo);
+    pdf.setFont("helvetica", "normal").setFontSize(layout.font).setTextColor(51, 65, 85);
+    layout.captions[position].forEach((line, offset) => pdf.text(line, x + 1, y + layout.photo + 4 + offset * layout.line));
+  });
+  return pdf.output("blob");
 }
 
 function blobToBase64(blob) {
@@ -572,12 +602,20 @@ function downloadBlob(blob, fileName) {
 
 async function handleSaveAndPrint(event) {
   event.preventDefault();
+  if (savingReport || document.getElementById("submitBtn").disabled) return;
+  if (uncertainSave) {
+    alert("Status simpanan belum dapat disahkan. Semak Dashboard dan buka rekod yang sepadan sebelum menghantar semula.");
+    loadData(true);
+    return;
+  }
   if (previewRenderFrame) flushPreview();
   const editRowId = document.getElementById("editRowId").value || "";
 
   const submitBtn = document.getElementById("submitBtn");
+  savingReport = true;
   submitBtn.disabled = true;
   showSaveProgress();
+  document.getElementById("downloadSavedBtn").hidden = true;
   let currentStep = "images";
   try {
     setProgress("images", "active");
@@ -621,6 +659,7 @@ async function handleSaveAndPrint(event) {
       pdfFileName
     };
 
+    uncertainSave = true;
     const response = await fetch(getApiUrl(), {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -628,7 +667,12 @@ async function handleSaveAndPrint(event) {
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const result = await response.json();
-    if (result.status !== "success") throw new Error(result.message || "Rekod gagal disimpan");
+    if (result.status !== "success" || !Number.isInteger(Number(result.rowId)) || Number(result.rowId) < 2) throw new Error(result.message || "Pengesahan rekod belum diterima");
+    setReportMode(result.rowId);
+    uncertainSave = false;
+    Object.values(state.images).forEach(image => { image.changed = false; });
+    savedDownload = { blob: pdfBlob, name: pdfFileName };
+    document.getElementById("downloadSavedBtn").hidden = false;
     setProgress("drive", "done");
 
     currentStep = "done";
@@ -639,8 +683,17 @@ async function handleSaveAndPrint(event) {
     loadData(true);
   } catch (error) {
     console.error("Ralat simpan:", error);
-    showProgressError(currentStep, `Proses tidak selesai: ${error.message || error}`);
+    const message = uncertainSave ? "Status simpanan belum dapat disahkan. Semak Dashboard sebelum mencuba semula." : `Proses tidak selesai: ${error.message || error}`;
+    showProgressError(currentStep, message);
   } finally {
+    savingReport = false;
     submitBtn.disabled = false;
   }
+}
+
+function showFormPane(pane) {
+  const section = document.getElementById("sec-form");
+  section.dataset.pane = pane;
+  section.querySelectorAll(".opr-mobile-nav button").forEach((button, index) => button.setAttribute("aria-pressed", String(index === (pane === "entry" ? 0 : 1))));
+  updatePreview();
 }
