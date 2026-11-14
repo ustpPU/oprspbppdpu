@@ -188,7 +188,7 @@
         <div class="p-5 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50">
           <div>
             <h2 class="text-base font-bold text-slate-900">Senarai Laporan OPR Rekod</h2>
-            <p class="text-xs text-slate-500">Klik rekod untuk paparan semula, sunting atau cetak PDF.</p>
+            <p class="text-xs text-slate-500">Buka PDF tersimpan atau edit laporan melalui borang.</p>
           </div>
 
           <div class="flex items-center space-x-3">
@@ -676,6 +676,39 @@
       document.getElementById("statMonthOpr").innerText = countMonth;
     }
 
+    function renderOprActions(record) {
+      const rowId = Number(record.id);
+      if (!Number.isSafeInteger(rowId) || rowId < 2) return "";
+
+      const reference = String(record.pdfRef || "").trim();
+      let pdfUrl = "";
+      if (/^[A-Za-z0-9_-]{15,}$/.test(reference)) {
+        pdfUrl = `https://drive.google.com/file/d/${reference}/view`;
+      } else {
+        try {
+          const url = new URL(reference);
+          const id = url.pathname.match(/^\/file\/d\/([A-Za-z0-9_-]{15,})(?:\/|$)/)?.[1] || url.searchParams.get("id");
+          if (url.origin === "https://drive.google.com" && /^[A-Za-z0-9_-]{15,}$/.test(id || "")) {
+            const view = new URL(`https://drive.google.com/file/d/${id}/view`);
+            const resourceKey = url.searchParams.get("resourcekey");
+            if (resourceKey && /^[A-Za-z0-9_-]+$/.test(resourceKey)) view.searchParams.set("resourcekey", resourceKey);
+            pdfUrl = view.href;
+          }
+        } catch {
+          // Some older reports have no stored PDF link.
+        }
+      }
+
+      const pdfStyle = "px-3 py-1.5 border border-slate-300 rounded-lg text-xs font-bold whitespace-nowrap";
+      return `
+        <div class="flex flex-wrap items-center justify-center gap-2">
+          ${pdfUrl
+            ? `<a href="${pdfUrl}" target="_blank" rel="noopener noreferrer" class="${pdfStyle} bg-white text-slate-900 hover:bg-slate-100">Buka / Cetak PDF</a>`
+            : `<button type="button" disabled title="Tiada PDF tersimpan" class="${pdfStyle} text-slate-400">Buka / Cetak PDF</button>`}
+          <button type="button" onclick="loadOprForEdit({id: ${rowId}})" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold whitespace-nowrap">Edit PDF</button>
+        </div>`;
+    }
+
     function renderTable(data) {
       const tbody = document.getElementById("oprTableBody");
       if (data.length === 0) {
@@ -690,10 +723,7 @@
           <td class="py-3 px-4 text-slate-600">${r.tarikhPelaksanaan}</td>
           <td class="py-3 px-4 text-slate-700">${r.namaPegawai}</td>
           <td class="py-3 px-4 text-center">
-            <button onclick='loadOprForEdit(${JSON.stringify(r).replace(/'/g, "&apos;")})' class="px-3 py-1 bg-slate-900 text-white hover:bg-slate-800 rounded-lg font-bold text-[11px] transition space-x-1 shadow-sm">
-              <i class="fa-solid fa-pen-to-square"></i>
-              <span>Edit & Cetak</span>
-            </button>
+            ${renderOprActions(r)}
           </td>
         </tr>
       `).join("");
@@ -1168,10 +1198,7 @@
               <h5 class="font-bold text-slate-900 text-xs">${r.tajukProgram}</h5>
               <p class="text-[11px] text-slate-500 mt-0.5"><i class="fa-regular fa-calendar"></i> ${r.tarikhPelaksanaan} | ${r.masa}</p>
             </div>
-            <button onclick='loadOprForEdit(${JSON.stringify(r).replace(/'/g, "&apos;")})' class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition flex items-center space-x-1">
-              <i class="fa-solid fa-pen-to-square"></i>
-              <span>Edit / Cetak</span>
-            </button>
+            ${renderOprActions(r)}
           </div>
         `).join("");
       }
