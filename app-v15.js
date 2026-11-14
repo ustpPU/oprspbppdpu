@@ -321,7 +321,7 @@ function triggerPrint() {
 }
 
 let savingReport = false;
-let uncertainSave = false;
+let pendingSubmission = null;
 let savedDownload;
 
 function setReportMode(rowId) {
@@ -337,11 +337,10 @@ function downloadSavedReport() {
 }
 
 function resetOprForm() {
-  if (savingReport) return;
+  if (savingReport || pendingSubmission) return;
   if (!confirm("Adakah anda pasti untuk mengosongkan borang?")) return;
   document.getElementById("oprForm").reset();
   showFormPane("entry");
-  uncertainSave = false;
   setReportMode("");
   state.images = createImageState();
   for (let index = 1; index <= 4; index++) {
@@ -354,7 +353,7 @@ function resetOprForm() {
 }
 
 async function loadOprForEdit(summary) {
-  if (savingReport) return;
+  if (savingReport || pendingSubmission) return;
   const previousId = document.getElementById("editRowId").value;
   let loaded = false;
   switchTab("form");
@@ -401,8 +400,7 @@ async function loadOprForEdit(summary) {
     }
 
     loaded = true;
-    uncertainSave = false;
-    updatePreview();
+      updatePreview();
   } catch (error) {
     alert(error.message || "Butiran laporan tidak dapat dimuatkan.");
   } finally {
@@ -603,11 +601,6 @@ function downloadBlob(blob, fileName) {
 async function handleSaveAndPrint(event) {
   event.preventDefault();
   if (savingReport || document.getElementById("submitBtn").disabled) return;
-  if (uncertainSave) {
-    alert("Status simpanan belum dapat disahkan. Semak Dashboard dan buka rekod yang sepadan sebelum menghantar semula.");
-    loadData(true);
-    return;
-  }
   if (previewRenderFrame) flushPreview();
   const editRowId = document.getElementById("editRowId").value || "";
 
@@ -618,76 +611,89 @@ async function handleSaveAndPrint(event) {
   document.getElementById("downloadSavedBtn").hidden = true;
   let currentStep = "images";
   try {
-    setProgress("images", "active");
-    await waitForPreviewImages();
-    setProgress("images", "done");
+    if (!pendingSubmission) {
+      setProgress("images", "active");
+      await waitForPreviewImages();
+      setProgress("images", "done");
 
-    currentStep = "pdf";
-    setProgress("pdf", "active");
-    const pdfBlob = await generatePdfBlob();
-    const pdfBase64 = await blobToBase64(pdfBlob);
-    setProgress("pdf", "done");
+      currentStep = "pdf";
+      setProgress("pdf", "active");
+      const pdfBlob = await generatePdfBlob();
+      const pdfBase64 = await blobToBase64(pdfBlob);
+      setProgress("pdf", "done");
+
+      currentStep = "drive";
+      setProgress("drive", "active");
+      const title = document.getElementById("tajukProgram").value;
+      const officer = document.getElementById("namaPegawai").value;
+      const date = document.getElementById("tarikhLaporan").value;
+      const pdfFileName = `OPR_${safeFilePart(title)}_${safeFilePart(officer)}_${date || "LAPORAN"}.pdf`;
+      const payload = {
+        action: "saveReport",
+        submissionId: crypto.randomUUID(),
+        editRowId,
+        namaPegawai: officer,
+        jawatanPegawai: document.getElementById("jawatanPegawai").value,
+        tarikhLaporan: date,
+        tajukProgram: title,
+        tarikhPelaksanaan: document.getElementById("tarikhPelaksanaan").value,
+        masa: document.getElementById("masa").value,
+        sasaran: document.getElementById("sasaran").value,
+        pelibatan: document.getElementById("pelibatan").value,
+        objektif: document.getElementById("objektif").value,
+        kekuatan: document.getElementById("kekuatan").value,
+        penambahbaikan: document.getElementById("penambahbaikan").value,
+        gambar1: state.images[1].changed ? state.images[1].dataUrl : "",
+        gambar2: state.images[2].changed ? state.images[2].dataUrl : "",
+        kapsyen2: document.getElementById("kapsyen2").value,
+        gambar3: state.images[3].changed ? state.images[3].dataUrl : "",
+        kapsyen3: document.getElementById("kapsyen3").value,
+        gambar4: state.images[4].changed ? state.images[4].dataUrl : "",
+        kapsyen4: document.getElementById("kapsyen4").value,
+        pdfBase64,
+        pdfFileName
+      };
+
+      pendingSubmission = { body: JSON.stringify(payload), blob: pdfBlob, name: pdfFileName, images: Object.values(state.images).map(image => image.dataUrl) };
+    } else {
+      setProgress("images", "done");
+      setProgress("pdf", "done");
+    }
 
     currentStep = "drive";
     setProgress("drive", "active");
-    const title = document.getElementById("tajukProgram").value;
-    const officer = document.getElementById("namaPegawai").value;
-    const date = document.getElementById("tarikhLaporan").value;
-    const pdfFileName = `OPR_${safeFilePart(title)}_${safeFilePart(officer)}_${date || "LAPORAN"}.pdf`;
-    const payload = {
-      action: "saveReport",
-      editRowId,
-      namaPegawai: officer,
-      jawatanPegawai: document.getElementById("jawatanPegawai").value,
-      tarikhLaporan: date,
-      tajukProgram: title,
-      tarikhPelaksanaan: document.getElementById("tarikhPelaksanaan").value,
-      masa: document.getElementById("masa").value,
-      sasaran: document.getElementById("sasaran").value,
-      pelibatan: document.getElementById("pelibatan").value,
-      objektif: document.getElementById("objektif").value,
-      kekuatan: document.getElementById("kekuatan").value,
-      penambahbaikan: document.getElementById("penambahbaikan").value,
-      gambar1: state.images[1].changed ? state.images[1].dataUrl : "",
-      gambar2: state.images[2].changed ? state.images[2].dataUrl : "",
-      kapsyen2: document.getElementById("kapsyen2").value,
-      gambar3: state.images[3].changed ? state.images[3].dataUrl : "",
-      kapsyen3: document.getElementById("kapsyen3").value,
-      gambar4: state.images[4].changed ? state.images[4].dataUrl : "",
-      kapsyen4: document.getElementById("kapsyen4").value,
-      pdfBase64,
-      pdfFileName
-    };
-
-    uncertainSave = true;
+    const submission = pendingSubmission;
     const response = await fetch(getApiUrl(), {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(payload)
+      body: submission.body
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const result = await response.json();
     if (result.status !== "success" || !Number.isInteger(Number(result.rowId)) || Number(result.rowId) < 2) throw new Error(result.message || "Pengesahan rekod belum diterima");
     setReportMode(result.rowId);
-    uncertainSave = false;
-    Object.values(state.images).forEach(image => { image.changed = false; });
-    savedDownload = { blob: pdfBlob, name: pdfFileName };
+      pendingSubmission = null;
+    Object.values(state.images).forEach((image, index) => {
+      if (image.dataUrl === submission.images[index]) image.changed = false;
+    });
+    savedDownload = { blob: submission.blob, name: submission.name };
     document.getElementById("downloadSavedBtn").hidden = false;
     setProgress("drive", "done");
 
     currentStep = "done";
     setProgress("done", "active");
-    downloadBlob(pdfBlob, pdfFileName);
+    downloadSavedReport();
     setProgress("done", "done");
     document.getElementById("closeProgressBtn").classList.remove("hidden");
     loadData(true);
   } catch (error) {
     console.error("Ralat simpan:", error);
-    const message = uncertainSave ? "Status simpanan belum dapat disahkan. Semak Dashboard sebelum mencuba semula." : `Proses tidak selesai: ${error.message || error}`;
+    const message = pendingSubmission ? "Status simpanan belum dapat disahkan. Tutup mesej ini dan tekan Cuba Semula untuk menghantar salinan laporan yang sama." : `Proses tidak selesai: ${error.message || error}`;
     showProgressError(currentStep, message);
   } finally {
     savingReport = false;
     submitBtn.disabled = false;
+    if (pendingSubmission) document.getElementById("submitBtnText").textContent = "Cuba Semula";
   }
 }
 
