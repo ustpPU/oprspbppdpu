@@ -88,9 +88,30 @@ async function loadData(isRefresh = false) {
   }
 }
 
+// The deployed v15 Apps Script persists only its existing 21 columns.
+// Keep venue as a labelled second line of Masa for a lossless round trip
+// through that API, without migrating existing rows or requiring a redeploy.
+// Accept a dedicated tempat property too, for a future backend migration.
+function normalizeProgramLocation(record) {
+  const raw = String(record.masa || "");
+  const marker = "\nTempat: ";
+  const boundary = raw.indexOf(marker);
+  return {
+    ...record,
+    masa: boundary < 0 ? raw : raw.slice(0, boundary),
+    tempat: String(record.tempat || (boundary < 0 ? "" : raw.slice(boundary + marker.length)))
+  };
+}
+
+function serializeProgramTime(masa, tempat) {
+  const time = normalizeProgramLocation({ masa }).masa.trim();
+  const location = String(tempat || "").trim();
+  return location ? `${time}\nTempat: ${location}` : time;
+}
+
 function applyInitialData(result, selectedOfficer = "") {
   state.pegawai = result.pegawai || [];
-  state.respon = result.respon || [];
+  state.respon = (result.respon || []).map(normalizeProgramLocation);
   renderStats();
   filterTable();
   populatePegawaiDropdown();
@@ -224,6 +245,9 @@ function flushPreview() {
   document.getElementById("prevTarikh").innerText = document.getElementById("tarikhPelaksanaan").value || "";
   document.getElementById("prevMasa").innerText = document.getElementById("masa").value || "";
   document.getElementById("prevSasaran").innerText = document.getElementById("sasaran").value || "";
+  const tempat = document.getElementById("tempat").value.trim();
+  document.getElementById("prevTempat").innerText = tempat;
+  document.getElementById("prevTempatBox").classList.toggle("hidden", !tempat);
   const pelibatan = document.getElementById("pelibatan").value;
   document.getElementById("prevPelibatan").innerText = pelibatan;
   document.getElementById("prevPelibatanBox").classList.toggle("hidden", !pelibatan);
@@ -367,7 +391,7 @@ async function loadOprForEdit(summary) {
     const response = await fetch(`${getApiUrl()}?action=getRecord&rowId=${encodeURIComponent(summary.id)}`, { cache: "no-store" });
     const result = await response.json();
     if (!response.ok || result.status !== "success" || !result.record?.id) throw new Error("Butiran penuh laporan tidak dapat dimuatkan.");
-    const data = result.record;
+    const data = normalizeProgramLocation(result.record);
 
     document.getElementById("editRowId").value = data.id || "";
     document.getElementById("namaPegawai").value = data.namaPegawai || "";
@@ -376,6 +400,7 @@ async function loadOprForEdit(summary) {
     document.getElementById("tajukProgram").value = data.tajukProgram || "";
     document.getElementById("tarikhPelaksanaan").value = data.tarikhPelaksanaan || "";
     document.getElementById("masa").value = data.masa || "";
+    document.getElementById("tempat").value = data.tempat || "";
     document.getElementById("sasaran").value = data.sasaran || "";
     document.getElementById("pelibatan").value = data.pelibatan || "";
     document.getElementById("objektif").value = data.objektif || "";
@@ -507,6 +532,7 @@ async function generatePdfBlob() {
   const gallery = [2, 3, 4].filter(index => state.images[index].dataUrl);
   const sections = [
     ["Tarikh Pelaksanaan", value("tarikhPelaksanaan")], ["Masa", value("masa")],
+    ["Tempat", value("tempat")],
     ["Sasaran", value("sasaran")], ["Pelibatan", value("pelibatan")],
     ["Objektif Program", value("objektif")], ["Kekuatan", value("kekuatan")],
     ["Penambahbaikan", value("penambahbaikan")],
@@ -637,7 +663,8 @@ async function handleSaveAndPrint(event) {
         tarikhLaporan: date,
         tajukProgram: title,
         tarikhPelaksanaan: document.getElementById("tarikhPelaksanaan").value,
-        masa: document.getElementById("masa").value,
+        masa: serializeProgramTime(document.getElementById("masa").value, document.getElementById("tempat").value),
+        tempat: document.getElementById("tempat").value.trim(),
         sasaran: document.getElementById("sasaran").value,
         pelibatan: document.getElementById("pelibatan").value,
         objektif: document.getElementById("objektif").value,
